@@ -1,0 +1,44 @@
+.login {
+  height: 90vh;
+  background: #5584ac;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.dropdown-login {
+  width: 200px;
+}
+
+.login h1 {
+  font-weight: 700;
+  color: white;
+}
+.login h2 {
+  font-weight: 500;
+  color: white;
+  text-align: left;
+}
+
+.login-as-info {
+  text-align: center;
+}
+
+.login-form {
+  margin: 2rem 0;
+}
+
+.register-btn {
+  color: white;
+  font-weight: 500;
+}
+
+.register-btn:hover {
+  color: white;
+}
+
+.login h3 {
+  color: white;
+  font-weight: 500;
+}

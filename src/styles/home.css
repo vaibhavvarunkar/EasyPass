@@ -1,0 +1,43 @@
+.showcase {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: #5584ac;
+  height: 90vh;
+}
+
+.showcase img {
+  height: 60vh;
+  width: 40vw;
+}
+
+.showcase h1 {
+  font-weight: 700;
+  color: white;
+}
+
+.go-to-login-btn {
+  color: white;
+  font-weight: 500;
+  background: #95d1cc;
+  border: none;
+  border-radius: 5px;
+  text-decoration: none !important;
+  margin: 1rem 0;
+}
+
+.go-to-login-btn:hover {
+  background: #72d4cc;
+  color: white;
+}
+
+@media only screen and (max-width: 600px) {
+  .showcase img {
+    width: 100vw;
+    height: 50vh;
+  }
+  .showcase h1 {
+    font-size: 18px;
+  }
+}
