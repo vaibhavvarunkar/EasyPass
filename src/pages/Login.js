@@ -15,6 +15,10 @@ const Login = () => {
         { value: 'bus admin', label: 'Bus Admin' },
     ];
 
+    const registerOptions = [
+        { value: 'student', label: 'Student' },
+    ];
+
     const handleSelect = (selectedOption) => {
         setUser(selectedOption);
         setShowForm(true)
@@ -29,7 +33,7 @@ const Login = () => {
                         defaultValue={user.label}
                         onChange={(e) => handleSelect(e)}
                         className='dropdown-login'
-                        options={loginOptions}
+                        options={register ? registerOptions : loginOptions}
                         placeholder={register ? 'Register as' : "Login As"}
                     ></Select>
                 </div>
