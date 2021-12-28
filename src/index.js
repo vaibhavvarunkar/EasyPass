@@ -6,6 +6,7 @@ import "./App.css"
 import Home from './pages/Home';
 import About from './pages/About';
 import Login from './pages/Login';
+import SuccessRegister from './pages/SuccessRegister';
 
 ReactDOM.render(
   <React.StrictMode>
@@ -14,6 +15,7 @@ ReactDOM.render(
         <Route path="/" element={<Home />}></Route>
         <Route path="/about" element={<About />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/successful" element={<SuccessRegister />} />
       </Routes>
     </Router>
   </React.StrictMode>,
