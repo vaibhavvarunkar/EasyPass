@@ -42,3 +42,28 @@
   color: white;
   font-weight: 500;
 }
+
+.successPopup {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: darkgray;
+  height: 100vh;
+  width: 100vw;
+}
+
+.successPopup h3 {
+  position: absolute;
+  top: 14rem;
+  right: 10rem;
+  color: white;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.loader-main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}

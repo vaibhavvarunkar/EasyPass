@@ -6,8 +6,13 @@ import { Button, Form } from 'react-bootstrap';
 import axios from 'axios';
 import { API_ROOT } from '../constants';
 import { useNavigate } from 'react-router-dom';
+import SuccessRegister from './SuccessRegister';
+import Loader from '../components/loader/Loader';
+import { useDispatch } from 'react-redux';
+import { saveUserInfo } from '../redux/actions/UserActions';
 
 const Login = () => {
+    const dispatch = useDispatch()
     const [user, setUser] = useState({});
     const [name, setName] = useState("")
     const [email, setEmail] = useState("")
@@ -16,6 +21,7 @@ const Login = () => {
     const [showForm, setShowForm] = useState(false)
     const [register, setRegister] = useState(false)
     const [loading, setLoading] = useState(false)
+    const [successPopup, setSuccessPopup] = useState(false)
     const loginOptions = [
         { value: 'student', label: 'Student' },
         { value: 'college admin', label: 'College Admin' },
@@ -48,7 +54,8 @@ const Login = () => {
                 const res = await axios.post(`${API_ROOT}/user/signup`, body)
                 if (res.data.status === 200) {
                     setLoading(false)
-                    naviagte("/successful")
+                    setSuccessPopup(true)
+                    setShowForm(false)
                 } else {
                     alert(res.data.message)
                 }
@@ -63,8 +70,27 @@ const Login = () => {
 
     }
 
-    const handleLogin = () => {
-        console.log("run2");
+    const handleLogin = async (e) => {
+        e.preventDefault()
+        const body = {
+            "email": email,
+            "password": password,
+            "type": user.value
+        }
+        try {
+            setLoading(true)
+            const res = await axios.post(`${API_ROOT}/user/signin`, body)
+            console.log(res);
+            if (res.data.status === 200) {
+                setLoading(false)
+                dispatch(saveUserInfo(res.data.result))
+                localStorage.setItem("token", res.data.token)
+                naviagte("/user/home")
+            }
+        }
+        catch (err) {
+            console.log(err);
+        }
 
     }
 
@@ -77,82 +103,103 @@ const Login = () => {
             handleLogin(e)
         }
     }
+
+    const closePopup = () => {
+        setSuccessPopup(false)
+        setRegister(false)
+    }
     return (
         <>
             <Navbar1 />
-            <div className='login'>
-                <h1>Please Select An Option </h1>
-                <div className='login-dropdown'>
-                    <Select
-                        defaultValue={user.label}
-                        onChange={(e) => handleSelect(e)}
-                        className='dropdown-login'
-                        options={register ? registerOptions : loginOptions}
-                        placeholder={register ? 'Register as' : "Login As"}
-                    ></Select>
+            {
+                loading ? <div className='loader-main'>
+                    <Loader />
                 </div>
-                <div className='login-form'>
-                    {showForm ? <Form>
+                    :
+                    <>
                         {
-                            register ?
-                                <Form.Group className='mb-3' controlId='formBasicName'>
-                                    <Form.Label className='form-label'>
-                                        {user.label === 'Student'
-                                            ? 'Student Name'
-                                            : user.label === 'College Admin'
-                                                ? 'College Admin Name'
-                                                : user.label === 'Bus Admin'
-                                                    ? 'Bus Admin Name'
-                                                    : 'Railway Admin'
-                                                        ? 'Railway Admin Name'
-                                                        : ''}
-                                    </Form.Label>
-                                    <Form.Control onChange={(e) => setName(e.target.value)} type='text' placeholder='Enter full name' />
-                                </Form.Group>
+                            successPopup ?
+                                <div className='successPopup'>
+                                    <h3 onClick={() => closePopup()}>Close</h3>
+                                    <SuccessRegister />
+                                </div>
                                 :
-                                null
+                                <div className='login'>
+                                    <h1>Please Select An Option </h1>
+                                    <div className='login-dropdown'>
+                                        <Select
+                                            defaultValue={user.label}
+                                            onChange={(e) => handleSelect(e)}
+                                            className='dropdown-login'
+                                            options={register ? registerOptions : loginOptions}
+                                            placeholder={register ? 'Register as' : "Login As"}
+                                        ></Select>
+                                    </div>
+                                    <div className='login-form'>
+                                        {showForm ? <Form>
+                                            {
+                                                register ?
+                                                    <Form.Group className='mb-3' controlId='formBasicName'>
+                                                        <Form.Label className='form-label'>
+                                                            {user.label === 'Student'
+                                                                ? 'Student Name'
+                                                                : user.label === 'College Admin'
+                                                                    ? 'College Admin Name'
+                                                                    : user.label === 'Bus Admin'
+                                                                        ? 'Bus Admin Name'
+                                                                        : 'Railway Admin'
+                                                                            ? 'Railway Admin Name'
+                                                                            : ''}
+                                                        </Form.Label>
+                                                        <Form.Control onChange={(e) => setName(e.target.value)} type='text' placeholder='Enter full name' />
+                                                    </Form.Group>
+                                                    :
+                                                    null
+                                            }
+
+                                            <Form.Group className='mb-3' controlId='formBasicEmail'>
+                                                <Form.Label className='form-label'>
+                                                    {user.label === 'Student'
+                                                        ? 'Student Email'
+                                                        : user.label === 'College Admin'
+                                                            ? 'College Admin Email'
+                                                            : user.label === 'Bus Admin'
+                                                                ? 'Bus Admin Email'
+                                                                : 'Railway Admin'
+                                                                    ? 'Railway Admin Email'
+                                                                    : ''}
+                                                </Form.Label>
+                                                <Form.Control onChange={(e) => setEmail(e.target.value)} type='email' placeholder='Enter email' />
+                                            </Form.Group>
+
+                                            <Form.Group className='mb-3' controlId='formBasicPassword'>
+                                                <Form.Label>Password</Form.Label>
+                                                <Form.Control onChange={(e) => setPassword(e.target.value)} type='password' placeholder='Password' />
+                                            </Form.Group>
+
+                                            {
+                                                register ?
+                                                    <Form.Group className='mb-3' controlId='formBasicConfirmPassword'>
+                                                        <Form.Label>Confirm Password</Form.Label>
+                                                        <Form.Control onChange={(e) => setConfirmPass(e.target.value)} type='password' placeholder='Confirm Password' />
+                                                    </Form.Group>
+                                                    :
+                                                    <></>
+                                            }
+                                            <Button onClick={(e) => handleSubmit(e)} variant='primary' type='submit'>
+                                                {register ? "Register" : "Login"}
+                                            </Button>
+                                        </Form>
+                                            :
+                                            <></>
+                                        }
+                                    </div>
+                                    <h3>{register ? "Already Registered ?" : "Haven't Registered Yet ?"}</h3>
+                                    <Button onClick={() => setRegister(!register)} className='mt-2 btn btn-warning register-btn'>Click Here To {register ? "Login" : "Register"}</Button>
+                                </div>
                         }
-
-                        <Form.Group className='mb-3' controlId='formBasicEmail'>
-                            <Form.Label className='form-label'>
-                                {user.label === 'Student'
-                                    ? 'Student Email'
-                                    : user.label === 'College Admin'
-                                        ? 'College Admin Email'
-                                        : user.label === 'Bus Admin'
-                                            ? 'Bus Admin Email'
-                                            : 'Railway Admin'
-                                                ? 'Railway Admin Email'
-                                                : ''}
-                            </Form.Label>
-                            <Form.Control onChange={(e) => setEmail(e.target.value)} type='email' placeholder='Enter email' />
-                        </Form.Group>
-
-                        <Form.Group className='mb-3' controlId='formBasicPassword'>
-                            <Form.Label>Password</Form.Label>
-                            <Form.Control onChange={(e) => setPassword(e.target.value)} type='password' placeholder='Password' />
-                        </Form.Group>
-
-                        {
-                            register ?
-                                <Form.Group className='mb-3' controlId='formBasicConfirmPassword'>
-                                    <Form.Label>Confirm Password</Form.Label>
-                                    <Form.Control onChange={(e) => setConfirmPass(e.target.value)} type='password' placeholder='Confirm Password' />
-                                </Form.Group>
-                                :
-                                <></>
-                        }
-                        <Button onClick={(e) => handleSubmit(e)} variant='primary' type='submit'>
-                            {register ? "Register" : "Login"}
-                        </Button>
-                    </Form>
-                        :
-                        <></>
-                    }
-                </div>
-                <h3>{register ? "Already Registered ?" : "Haven't Registered Yet ?"}</h3>
-                <Button onClick={() => setRegister(!register)} className='mt-2 btn btn-warning register-btn'>Click Here To {register ? "Login" : "Register"}</Button>
-            </div>
+                    </>
+            }
         </>
     );
 };

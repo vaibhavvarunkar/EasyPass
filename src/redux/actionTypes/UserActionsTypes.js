@@ -1,0 +1,2 @@
+export const SAVE_USER_INFO = "SAVE_USER_IN"
+export const CLEAR_USER_INFO = "CLEAR_USER_INFO"
