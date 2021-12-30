@@ -18,10 +18,10 @@ ReactDOM.render(
         <Router>
           <Routes>
             <Route path="/" element={<Home />}></Route>
-            <Route path="/about" element={<About />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/user/home" element={<UserHomePage />} />
-            <Route path="/user/profile" element={<UserProfilePage />} />
+            <Route path="/about/" element={<About />} />
+            <Route path="/login/" element={<Login />} />
+            <Route path="/user/home/" element={<UserHomePage />} />
+            <Route path="/user/profile/" element={<UserProfilePage />} />
           </Routes>
         </Router>
       </PersistGate>
