@@ -3,11 +3,14 @@ import UserNavbar from '../components/userNavbar/UserNavbar'
 
 const UserProfilePage = () => {
     const [auth, setAuth] = useState(false)
-    useEffect(() => {
+    const authenticate = () => {
         localStorage.getItem("token") ?
             setAuth(true)
             :
             setAuth(false)
+    }
+    useEffect(() => {
+        authenticate()
     })
     return (
         <div>
