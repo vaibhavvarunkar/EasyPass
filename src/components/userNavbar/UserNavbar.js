@@ -36,6 +36,7 @@ const UserNavbar = () => {
                                     Logout
                                 </NavLink>
                             </Nav.Link>
+
                         </Nav>
                     </Navbar.Collapse>
                 </Container>
