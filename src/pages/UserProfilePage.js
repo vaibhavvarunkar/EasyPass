@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Form, FormControl } from 'react-bootstrap';
+import { Button, Form } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 import UserNavbar from '../components/userNavbar/UserNavbar';
 import '../styles/userProfile.css';
@@ -7,7 +7,6 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 // import moment from 'moment'
 import Select from 'react-select';
-import { logDOM } from '@testing-library/react';
 
 const UserProfilePage = () => {
     const [auth, setAuth] = useState(false);
