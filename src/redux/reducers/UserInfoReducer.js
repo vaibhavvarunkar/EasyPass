@@ -1,7 +1,8 @@
-import { SAVE_USER_INFO, CLEAR_USER_INFO } from "../actionTypes/UserActionsTypes";
+import { SAVE_USER_INFO, CLEAR_USER_INFO, USER_PROFILE_INFO, CLAER_USER_PROFILE_INFO } from "../actionTypes/UserActionsTypes";
 
 const initialState = {
-    userInfo: []
+    userInfo: [],
+    profileInfo: []
 }
 
 const userInfoReducer = (state = initialState, action) => {
@@ -16,7 +17,16 @@ const userInfoReducer = (state = initialState, action) => {
                 ...state,
                 userInfo: []
             }
-
+        case USER_PROFILE_INFO:
+            return {
+                ...state,
+                profileInfo: action.payload
+            }
+        case CLAER_USER_PROFILE_INFO:
+            return {
+                ...state,
+                profileInfo: []
+            }
         default: return state
 
     }

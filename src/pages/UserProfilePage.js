@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useLayoutEffect, useState } from 'react';
 import { Button, Form } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 import UserNavbar from '../components/userNavbar/UserNavbar';
@@ -18,11 +18,10 @@ const UserProfilePage = () => {
     const [startDate, setStartDate] = useState(new Date());
     const userEmail = useSelector((state) => state.userReducer.userInfo.email);
     const userName = useSelector((state) => state.userReducer.userInfo.name);
-    // console.log(typeof (moment(startDate).format("LL")));
     const authenticate = () => {
         localStorage.getItem('token') ? setAuth(true) : setAuth(false);
     };
-    useEffect(() => {
+    useLayoutEffect(() => {
         authenticate();
     }, []);
 
@@ -171,7 +170,6 @@ const UserProfilePage = () => {
                                     required
                                 />
                             </Form.Group>
-                            {console.log(preview)}
                             {collegeIdFile !== null ? (
                                 <img id='collegeId' style={{ height: "120px", width: "200px" }} src={preview} alt='Id-preview'></img>
                             ) : (

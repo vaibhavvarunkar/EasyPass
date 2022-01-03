@@ -62,6 +62,7 @@ const Login = () => {
             }
             catch (err) {
                 console.log(err.messsage);
+                setLoading(false)
             }
         }
         else {
@@ -70,6 +71,19 @@ const Login = () => {
 
     }
 
+    const getUserProfile = async () => {
+        const token = await localStorage.getItem("token")
+        const config = {
+            headers: { Authorization: `Bearer ${token}` }
+        };
+
+        const res = await axios.get(
+            `${API_ROOT}/profile/current`,
+            config
+        )
+        console.log(res);
+
+    }
     const handleLogin = async (e) => {
         e.preventDefault()
         const body = {
@@ -82,14 +96,20 @@ const Login = () => {
             const res = await axios.post(`${API_ROOT}/user/signin`, body)
             console.log(res);
             if (res.data.status === 200) {
-                setLoading(false)
                 dispatch(saveUserInfo(res.data.result))
                 localStorage.setItem("token", res.data.token)
+                getUserProfile()
                 naviagte("/user/home")
+                setLoading(false)
+            }
+            else {
+                alert(res.data.message)
+                setLoading(false)
             }
         }
         catch (err) {
             console.log(err);
+            setLoading(false)
         }
 
     }
