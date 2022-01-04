@@ -9,7 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import SuccessRegister from './SuccessRegister';
 import Loader from '../components/loader/Loader';
 import { useDispatch } from 'react-redux';
-import { saveUserInfo } from '../redux/actions/UserActions';
+import { saveUserInfo, userProfileInfo } from '../redux/actions/UserActions';
 
 const Login = () => {
     const dispatch = useDispatch()
@@ -82,7 +82,9 @@ const Login = () => {
             config
         )
         console.log(res);
-
+        if (res.data.status === 200) {
+            dispatch(userProfileInfo(res.data.profile))
+        }
     }
     const handleLogin = async (e) => {
         e.preventDefault()

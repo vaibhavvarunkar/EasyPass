@@ -2,7 +2,7 @@ import React from 'react'
 import { Container, Nav, Navbar } from 'react-bootstrap'
 import { useDispatch } from 'react-redux';
 import { NavLink, useNavigate } from 'react-router-dom';
-import { clearUserInfo } from '../../redux/actions/UserActions';
+import { clearUserInfo, clearUserProfileInfo } from '../../redux/actions/UserActions';
 
 const UserNavbar = () => {
     const dispatch = useDispatch()
@@ -10,6 +10,7 @@ const UserNavbar = () => {
     const Logout = (e) => {
         e.preventDefault()
         dispatch(clearUserInfo())
+        dispatch(clearUserProfileInfo())
         localStorage.removeItem("token")
         navigate("/login")
     }

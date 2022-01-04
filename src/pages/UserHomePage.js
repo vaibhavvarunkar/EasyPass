@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useLayoutEffect, useState } from 'react'
 import { Button } from 'react-bootstrap'
 import { useSelector } from 'react-redux'
 import UserNavbar from '../components/userNavbar/UserNavbar'
@@ -13,7 +13,7 @@ const UserHomePage = () => {
             :
             setAuth(false)
     }
-    useEffect(() => {
+    useLayoutEffect(() => {
         authenticate()
     }, [])
     return (
