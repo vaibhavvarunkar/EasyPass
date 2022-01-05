@@ -3,3 +3,19 @@
   min-height: 100vh;
   width: 80vw;
 }
+
+.confirmPopup {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #22577e;
+  z-index: 999;
+  position: absolute;
+  margin: 12rem auto;
+  height: 60vh;
+  width: 70vw;
+  top: 0;
+  left: 14rem;
+  color: white;
+  flex-direction: column;
+}

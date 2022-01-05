@@ -9,7 +9,7 @@ import Select from 'react-select';
 import axios from 'axios';
 import moment from 'moment';
 import { API_ROOT } from '../constants';
-import { userProfileInfo } from '../redux/actions/UserActions';
+import { userProfileInfo, clearUserProfileInfo } from '../redux/actions/UserActions';
 import Loader from '../components/loader/Loader';
 
 const UserProfilePage = () => {
@@ -20,7 +20,7 @@ const UserProfilePage = () => {
     const [preview, setPreview] = useState(null);
     const [year, setYear] = useState({});
     const [branch, setBranch] = useState({});
-    const [savedProfileView, setSavedProfile] = useState(false);
+    const [savedProfileView, setSavedProfileView] = useState(false);
     const [startDate, setStartDate] = useState(new Date());
     const [userIdName, setUserIdName] = useState(null);
     const userEmail = useSelector((state) => state.userReducer.userInfo.email);
@@ -29,14 +29,15 @@ const UserProfilePage = () => {
     const authenticate = () => {
         localStorage.getItem('token') ? setAuth(true) : setAuth(false);
     };
+    const [showConfirm, setShowConfirm] = useState(false)
     const dispatch = useDispatch()
     useLayoutEffect(() => {
         authenticate()
         if (Object.keys(profileInfo).length > 1) {
-            setSavedProfile(true)
+            setSavedProfileView(true)
         }
         else {
-            setSavedProfile(false)
+            setSavedProfileView(false)
         }
     }, [savedProfileView, profileInfo]);
 
@@ -96,7 +97,7 @@ const UserProfilePage = () => {
             const res = await axios.post(`${API_ROOT}/profile/create`, form, config);
             if (res.data.status === 200) {
                 dispatch(userProfileInfo(res.data.profilee))
-                setSavedProfile(true);
+                setSavedProfileView(true);
                 setLoading(false);
             } else {
                 alert(res.data.message);
@@ -111,6 +112,39 @@ const UserProfilePage = () => {
     const setUsernNameId = (e) => {
         setUserIdName(e.target.value);
     };
+    const editUserProfile = () => {
+        setLoading(true)
+        dispatch(clearUserProfileInfo())
+        setSavedProfileView(false)
+        setLoading(false)
+    }
+
+    const showConfirmPage = () => {
+        setShowConfirm(true)
+    }
+
+    const submitVerification = async (e) => {
+        e.preventDefault()
+        setLoading(true)
+        setShowConfirm(false)
+        const token = localStorage.getItem('token');
+        const config = {
+            headers: { Authorization: `Bearer ${token}` },
+        };
+        const body = {}
+        try {
+            const res = await axios.post(`${API_ROOT}/profile/verify`, body, config)
+            dispatch(userProfileInfo(res.data.profilee))
+            setLoading(false)
+            alert(res.data.message)
+        }
+        catch (err) {
+            console.log(err);
+            setLoading(false)
+        }
+    }
+
+
     return (
         <div>
             {loading ? <div className='loader-main'>
@@ -260,6 +294,22 @@ const UserProfilePage = () => {
                         <br></br>
                         <Form style={{ width: '90%', margin: 'auto' }}>
                             <Form.Group className='mb-3' controlId='formBasicEmail'>
+                                <Form.Label>Account Verification Status</Form.Label>
+                                <Form.Control
+                                    type='text'
+                                    value={profileInfo.profileVerifystatus}
+                                    readOnly
+                                />
+                            </Form.Group>
+                            <Form.Group className='mb-3' controlId='formBasicEmail'>
+                                <Form.Label>Account Sent For Verification Status</Form.Label>
+                                <Form.Control
+                                    type='text'
+                                    value={profileInfo.profileVerifyApplied ? "Sent For Verification" : "Please Request For Verification"}
+                                    readOnly
+                                />
+                            </Form.Group>
+                            <Form.Group className='mb-3' controlId='formBasicEmail'>
                                 <Form.Label>Email address</Form.Label>
                                 <Form.Control
                                     type='email'
@@ -324,14 +374,39 @@ const UserProfilePage = () => {
                                 ></img>
                             </div>
                             <br></br>
-                            <Button variant='primary' type='submit'>
-                                Submit
-                            </Button>
-                            <div style={{ height: '20px' }}></div>
+                            {
+                                profileInfo.profileVerifyApplied ? null : <>
+                                    <Button onClick={() => showConfirmPage()} variant='primary'>
+                                        Submit Account For Verification
+                                    </Button>
+                                    <div style={{ height: '20px' }}></div>
+                                    {
+                                        profileInfo.profileVerifystatus === "Verified" ? null : <>
+                                            <Button onClick={() => editUserProfile()} variant='danger'>
+                                                Edit Profile
+                                            </Button>
+                                            <div style={{ height: '20px' }}></div>
+                                        </>
+                                    }
+                                </>
+                            }
                         </Form>
                     </div>
                 ) : null}
             </>}
+            {
+                showConfirm ?
+                    <>
+                        <div className='confirmPopup'>
+                            <h1>Are You sure ?</h1>
+                            <h1> You Won't Be Able To Make Changes After This !</h1>
+                            <Button onClick={(e) => submitVerification(e)} type='submit' variant='danger'>Submit</Button>
+                            <br></br>
+                            <Button onClick={() => setShowConfirm(false)} variant='warning'>Cancel</Button>
+                        </div>
+                    </>
+                    : null
+            }
         </div>
     );
 };
