@@ -18,7 +18,7 @@ const Login = () => {
         if (localStorage.getItem("token")) {
             navigate("/user/home")
         }
-    }, [])
+    })
     const dispatch = useDispatch()
     const [user, setUser] = useState({});
     const [name, setName] = useState("")

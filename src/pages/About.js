@@ -9,7 +9,7 @@ const About = () => {
         if (localStorage.getItem("token")) {
             navigate("/user/home")
         }
-    }, [])
+    })
     return (
         <>
             <Navbar1 />
