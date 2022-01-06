@@ -1,10 +1,17 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Navbar1 from '../components/navbar/Navbar1';
 import '../styles/home.css';
 import students from '../assests/—Pngtree—reading student_5420475.png';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
 const Home = () => {
+    const navigate = useNavigate()
+
+    useEffect(() => {
+        if (localStorage.getItem("token")) {
+            navigate("/user/home")
+        }
+    }, [])
     return (
         <>
             <Navbar1 />
