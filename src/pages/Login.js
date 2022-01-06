@@ -88,37 +88,39 @@ const Login = () => {
             `${API_ROOT}/profile/current`,
             config
         )
-        console.log(res);
         if (res.data.status === 200) {
             dispatch(userProfileInfo(res.data.profile))
         }
     }
     const handleLogin = async (e) => {
         e.preventDefault()
-        const body = {
-            "email": email,
-            "password": password,
-            "type": user.value
-        }
-        try {
-            setLoading(true)
-            const res = await axios.post(`${API_ROOT}/user/signin`, body)
-            console.log(res);
-            if (res.data.status === 200) {
-                dispatch(saveUserInfo(res.data.result))
-                localStorage.setItem("token", res.data.token)
-                getUserProfile()
-                naviagte("/user/home")
+        if (user.value === "student") {
+            const body = {
+                "email": email,
+                "password": password,
+                "type": user.value
+            }
+            try {
+                setLoading(true)
+                const res = await axios.post(`${API_ROOT}/user/signin`, body)
+                if (res.data.status === 200) {
+                    dispatch(saveUserInfo(res.data.result))
+                    localStorage.setItem("token", res.data.token)
+                    getUserProfile()
+                    naviagte("/user/home")
+                    setLoading(false)
+                }
+                else {
+                    alert(res.data.message)
+                    setLoading(false)
+                }
+            }
+            catch (err) {
+                console.log(err);
                 setLoading(false)
             }
-            else {
-                alert(res.data.message)
-                setLoading(false)
-            }
         }
-        catch (err) {
-            console.log(err);
-            setLoading(false)
+        else if (user.value === "college admin") {
         }
 
     }
