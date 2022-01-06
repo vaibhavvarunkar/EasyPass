@@ -80,33 +80,38 @@ const UserProfilePage = () => {
     };
 
     const submitProfile = async (e) => {
-        setLoading(true);
-        e.preventDefault();
-        const token = await localStorage.getItem('token');
-        const config = {
-            headers: { Authorization: `Bearer ${token}` },
-        };
-        let form = new FormData();
-        form.append('nameAsPerIdCard', userIdName);
-        form.append('dateOfBirth', moment(startDate).format('DD/MM/YYYY'));
-        form.append('collegeName', college.value);
-        form.append('branchName', branch.value);
-        form.append('currentYearOfStudy', year.value);
-        form.append('collegeId', collegeIdFile);
-        try {
-            const res = await axios.post(`${API_ROOT}/profile/create`, form, config);
-            if (res.data.status === 200) {
-                dispatch(userProfileInfo(res.data.profilee))
-                setSavedProfileView(true);
-                setLoading(false);
-            } else {
-                alert(res.data.message);
-                setLoading(false);
-            }
-        } catch (err) {
-            alert(err);
+        if (collegeIdFile === null || startDate === null || branch === null || year === null || userIdName === null) {
+            alert("All fields are necessary !")
         }
-        setLoading(false);
+        else {
+            setLoading(true);
+            e.preventDefault();
+            const token = await localStorage.getItem('token');
+            const config = {
+                headers: { Authorization: `Bearer ${token}` },
+            };
+            let form = new FormData();
+            form.append('nameAsPerIdCard', userIdName);
+            form.append('dateOfBirth', moment(startDate).format('DD/MM/YYYY'));
+            form.append('collegeName', college.value);
+            form.append('branchName', branch.value);
+            form.append('currentYearOfStudy', year.value);
+            form.append('collegeId', collegeIdFile);
+            try {
+                const res = await axios.post(`${API_ROOT}/profile/create`, form, config);
+                if (res.data.status === 200) {
+                    dispatch(userProfileInfo(res.data.profilee))
+                    setSavedProfileView(true);
+                    setLoading(false);
+                } else {
+                    alert(res.data.message);
+                    setLoading(false);
+                }
+            } catch (err) {
+                alert(err);
+            }
+            setLoading(false);
+        }
     };
 
     const setUsernNameId = (e) => {
@@ -119,8 +124,19 @@ const UserProfilePage = () => {
         setLoading(false)
     }
 
+    const scrollToTop = () => {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+            /* you can also use 'auto' behaviour
+               in place of 'smooth' */
+        });
+    };
+
     const showConfirmPage = () => {
         setShowConfirm(true)
+        scrollToTop()
+
     }
 
     const submitVerification = async (e) => {
@@ -189,7 +205,7 @@ const UserProfilePage = () => {
                                                 <Form.Label>Name As Per College ID-Card</Form.Label>
                                                 <Form.Control
                                                     type='text'
-                                                    placeholder='name@example.com'
+                                                    placeholder='Stephen Duke'
                                                     required
                                                     onChange={(e) => setUsernNameId(e)}
                                                 />
