@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Navbar1 from '../components/navbar/Navbar1';
 import '../styles/login.css';
 import Select from 'react-select';
@@ -12,6 +12,13 @@ import { useDispatch } from 'react-redux';
 import { saveUserInfo, userProfileInfo } from '../redux/actions/UserActions';
 
 const Login = () => {
+    const navigate = useNavigate()
+
+    useEffect(() => {
+        if (localStorage.getItem("token")) {
+            navigate("/user/home")
+        }
+    }, [])
     const dispatch = useDispatch()
     const [user, setUser] = useState({});
     const [name, setName] = useState("")
