@@ -1,0 +1,20 @@
+.past-concession-letter-app {
+  width: 90% !important;
+  margin: 0 auto;
+}
+
+.past-form {
+  width: 90%;
+  margin: 1rem auto;
+}
+
+label {
+  margin: 0.5rem 0;
+}
+
+.download-pdf {
+  margin: 1rem auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

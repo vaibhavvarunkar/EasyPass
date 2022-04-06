@@ -77,4 +77,7 @@
     font-weight: 700;
     cursor: pointer;
   }
+  .login {
+    padding: 1rem 0;
+  }
 }

@@ -10,6 +10,7 @@ import SuccessRegister from './SuccessRegister';
 import Loader from '../components/loader/Loader';
 import { useDispatch } from 'react-redux';
 import { saveUserInfo, userProfileInfo } from '../redux/actions/UserActions';
+import { getApprovedConcessionReq, getConcessionReq, getVerificationReq, getVerifiedProfiles } from '../redux/actions/AdminActions';
 
 const Login = () => {
     const navigate = useNavigate()
@@ -68,7 +69,7 @@ const Login = () => {
                 }
             }
             catch (err) {
-                console.log(err.messsage);
+                alert(err)
                 setLoading(false)
             }
         }
@@ -92,9 +93,51 @@ const Login = () => {
             dispatch(userProfileInfo(res.data.profile))
         }
     }
+
+    const getStudentConcessionReqs = async () => {
+        const token = await localStorage.getItem("token")
+        const config = {
+            headers: { Authorization: `Bearer ${token}` }
+        }
+        try {
+            const res = await axios.get(
+                `${API_ROOT}/profile/admingetapp`,
+                config
+            )
+            console.log(res);
+            if (res.data.status === 200) {
+                dispatch(getConcessionReq(res.data.unapprovedProfiles))
+                dispatch(getApprovedConcessionReq(res.data.approveddProfiles))
+            }
+        }
+        catch (err) {
+            alert(err);
+        }
+    }
+
+    const getStudentVerificationReqs = async () => {
+        const token = await localStorage.getItem("token")
+        const config = {
+            headers: { Authorization: `Bearer ${token}` }
+        }
+        try {
+            const res = await axios.get(
+                `${API_ROOT}/profile/adminverifyall`,
+                config
+            )
+            console.log(res);
+            if (res.data.unVerifiedProfiles && res.data.verifiedProfiles) {
+                dispatch(getVerificationReq(res.data.unVerifiedProfiles))
+                dispatch(getVerifiedProfiles(res.data.verifiedProfiles))
+            }
+        }
+        catch (err) {
+            alert(err)
+        }
+    }
     const handleLogin = async (e) => {
         e.preventDefault()
-        if (user.value === "student") {
+        if (user.value === "student" || user.value === "college admin") {
             const body = {
                 "email": email,
                 "password": password,
@@ -106,9 +149,17 @@ const Login = () => {
                 if (res.data.status === 200) {
                     dispatch(saveUserInfo(res.data.result))
                     localStorage.setItem("token", res.data.token)
-                    getUserProfile()
-                    naviagte("/user/home")
-                    setLoading(false)
+                    if (res.data.result.type === "student") {
+                        getUserProfile()
+                        naviagte("/user/home")
+                        setLoading(false)
+                    }
+                    if (res.data.result.type === "college admin") {
+                        getStudentVerificationReqs()
+                        getStudentConcessionReqs()
+                        naviagte("/admin/home")
+                        setLoading(false)
+                    }
                 }
                 else {
                     alert(res.data.message)

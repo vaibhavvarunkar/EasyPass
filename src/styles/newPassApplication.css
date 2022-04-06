@@ -1,0 +1,67 @@
+.new-application-page {
+  margin: 1rem auto;
+  width: 90%;
+}
+
+.verify-error {
+  text-align: center;
+  margin: 1rem auto;
+}
+
+.dropdown-location {
+  width: 300px;
+  margin: 0 0 1rem 0;
+}
+
+.address-doc {
+  height: 250px;
+  width: 200px;
+  margin: 1rem 0;
+}
+
+.pass-app-successful {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  height: 500px;
+  width: 60%;
+  background: rgb(96, 170, 255);
+  color: white;
+  flex-direction: column;
+  margin: 1rem auto;
+  position: absolute;
+  top: 20%;
+  left: 20%;
+}
+
+.pass-app-successful h4 {
+  position: relative;
+  bottom: 11rem;
+  left: 24rem;
+  cursor: pointer;
+  font-size: 30px;
+  font-weight: bold;
+}
+.pass-app-successful h4:hover {
+  color: black;
+}
+
+@media only screen and (max-width: 600px) {
+  .pass-app-successful {
+    height: 300px;
+    width: 90%;
+    left: 5%;
+    top: 30%;
+    font-size: 16px;
+    border-radius: 8px;
+  }
+  .pass-app-successful h4 {
+    position: relative;
+    bottom: 4rem;
+    left: 8rem;
+    cursor: pointer;
+    font-size: 30px;
+    font-weight: bold;
+  }
+}

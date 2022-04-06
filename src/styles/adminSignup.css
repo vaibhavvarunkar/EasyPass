@@ -1,0 +1,10 @@
+.admin-signup {
+  height: 90vh;
+  background: #5584ac;
+}
+
+.admin-form {
+  width: 50%;
+  padding: 1rem 0;
+  margin: auto;
+}

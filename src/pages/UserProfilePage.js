@@ -317,14 +317,18 @@ const UserProfilePage = () => {
                                     readOnly
                                 />
                             </Form.Group>
-                            <Form.Group className='mb-3' controlId='formBasicEmail'>
-                                <Form.Label>Account Sent For Verification Status</Form.Label>
-                                <Form.Control
-                                    type='text'
-                                    value={profileInfo.profileVerifyApplied ? "Sent For Verification" : "Please Request For Verification"}
-                                    readOnly
-                                />
-                            </Form.Group>
+                            {
+                                profileInfo.profileVerifystatus === "Verified" ?
+                                    null :
+                                    <Form.Group className='mb-3' controlId='formBasicEmail'>
+                                        <Form.Label>Account Sent For Verification Status</Form.Label>
+                                        <Form.Control
+                                            type='text'
+                                            value={profileInfo.profileVerifyApplied ? "Sent For Verification" : "Please Request For Verification"}
+                                            readOnly
+                                        />
+                                    </Form.Group>
+                            }
                             <Form.Group className='mb-3' controlId='formBasicEmail'>
                                 <Form.Label>Email address</Form.Label>
                                 <Form.Control

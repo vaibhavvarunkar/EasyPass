@@ -4,12 +4,19 @@ import '../styles/home.css';
 import students from '../assests/—Pngtree—reading student_5420475.png';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
+import { useSelector } from 'react-redux';
 const Home = () => {
     const navigate = useNavigate()
+    const userType = useSelector((state) => state.userReducer.userInfo.type);
 
     useEffect(() => {
         if (localStorage.getItem("token")) {
-            navigate("/user/home")
+            if (userType === "student") {
+                navigate("/user/home")
+            }
+            if (userType === "college admin") {
+                navigate("/admin/home")
+            }
         }
     }, [navigate])
     return (

@@ -1,10 +1,12 @@
 import React, { useLayoutEffect, useState } from 'react'
 import { Button } from 'react-bootstrap'
 import { useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 import UserNavbar from '../components/userNavbar/UserNavbar'
 import "../styles/userHomepage.css"
 
 const UserHomePage = () => {
+    const navigate = useNavigate()
     const [auth, setAuth] = useState(false)
     const userName = useSelector(state => state.userReducer.userInfo.name)
     const authenticate = () => {
@@ -16,6 +18,10 @@ const UserHomePage = () => {
     useLayoutEffect(() => {
         authenticate()
     }, [])
+
+    const routeToApplication = () => {
+        navigate("/user/travel-pass/applications")
+    }
     return (
         <div>
             {
@@ -24,7 +30,7 @@ const UserHomePage = () => {
                         <UserNavbar />
                         <div className='user-home'>
                             <h3>Welcome, {userName} !</h3>
-                            <Button>Manage Your Applications</Button>
+                            <Button onClick={() => routeToApplication()}>Manage Your Applications</Button>
                         </div>
                     </>
                     :
