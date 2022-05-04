@@ -45,6 +45,7 @@ const AdminAllConcessionApp = () => {
                                                     <tbody>
                                                         {
                                                             allConcessionReqs.map((req, i) => {
+                                                                console.log(req)
                                                                 return (
                                                                     <>
                                                                         <tr>

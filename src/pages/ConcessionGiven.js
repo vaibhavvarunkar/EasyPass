@@ -32,6 +32,7 @@ const ConcessionGiven = () => {
                                 <tbody>
                                     {
                                         allApprovedConcessionReqs.map((req, i) => {
+                                            console.log(req)
                                             return (
                                                 <>
                                                     {

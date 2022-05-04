@@ -99,6 +99,7 @@ const UserProfilePage = () => {
             form.append('collegeId', collegeIdFile);
             try {
                 const res = await axios.post(`${API_ROOT}/profile/create`, form, config);
+                console.log(res);
                 if (res.data.status === 200) {
                     dispatch(userProfileInfo(res.data.profilee))
                     setSavedProfileView(true);

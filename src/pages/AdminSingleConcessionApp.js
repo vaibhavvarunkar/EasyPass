@@ -37,13 +37,13 @@ const AdminSingleConcessionApp = () => {
         }
         try {
             const res = await axios.post(
-                `${API_ROOT}/profile/adminverifyapp`,
+                `${API_ROOT}/profile/adminapprove`,
                 body,
                 config
             )
             console.log(res);
             if (res.data.status === "Successfully Verified!") {
-                // navigate("/admin/all-concession-applications")
+                navigate("/admin/all-concession-applications")
                 setIsLoading(false)
                 dispatch(getConcessionReq(res.data.unApproovedProfiles))
                 dispatch(getApprovedConcessionReq(res.data.approoveddProfiles))

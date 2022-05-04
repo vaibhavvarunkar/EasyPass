@@ -84,12 +84,12 @@ const Login = () => {
         const config = {
             headers: { Authorization: `Bearer ${token}` }
         };
-
         const res = await axios.get(
             `${API_ROOT}/profile/current`,
             config
         )
         if (res.data.status === 200) {
+            console.log(res);
             dispatch(userProfileInfo(res.data.profile))
         }
     }
@@ -147,6 +147,7 @@ const Login = () => {
                 setLoading(true)
                 const res = await axios.post(`${API_ROOT}/user/signin`, body)
                 if (res.data.status === 200) {
+                    console.log(res);
                     dispatch(saveUserInfo(res.data.result))
                     localStorage.setItem("token", res.data.token)
                     if (res.data.result.type === "student") {

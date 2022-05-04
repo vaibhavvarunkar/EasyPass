@@ -63,7 +63,6 @@ const NewPassApplication = () => {
         setPreview(URL.createObjectURL(e.target.files[0]));
         setAddressProofDoc(e.target.files[0]);
     };
-
     const submitApplication = async (e) => {
         const token = localStorage.getItem('token');
         const config = {
@@ -239,7 +238,7 @@ const NewPassApplication = () => {
                                             lastApplication.applicationStatus === "Under Process" ?
                                                 <h1 style={{ margin: "auto" }}>You already have one application under process.</h1>
                                                 :
-                                                null
+                                                <h3>Please make a profile first and send it for verification</h3>
                                         }
                                     </>
                             }
