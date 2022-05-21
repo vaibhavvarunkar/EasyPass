@@ -74,6 +74,52 @@ const UserNavbar = () => {
                                 :
                                 null
                         }
+                        {
+                            userType === "train admin" ?
+                                <Nav className='ms-auto'>
+                                    <Nav.Link>
+                                        <NavLink to='/admin/train/home' className="link-navbar">
+                                            Home
+                                        </NavLink>
+                                    </Nav.Link>
+                                    <Nav.Link>
+                                        <NavLink to='/admin/train/profile' className="link-navbar">
+                                            Profile
+                                        </NavLink>
+                                    </Nav.Link>
+                                    <Nav.Link>
+                                        <NavLink onClick={(e) => Logout(e)} to="/login" className="link-navbar">
+                                            Logout
+                                        </NavLink>
+                                    </Nav.Link>
+
+                                </Nav>
+                                :
+                                null
+                        }
+                        {
+                            userType === "bus admin" ?
+                                <Nav className='ms-auto'>
+                                    <Nav.Link>
+                                        <NavLink to='/admin/bus/home' className="link-navbar">
+                                            Home
+                                        </NavLink>
+                                    </Nav.Link>
+                                    <Nav.Link>
+                                        <NavLink to='/admin/bus/profile' className="link-navbar">
+                                            Profile
+                                        </NavLink>
+                                    </Nav.Link>
+                                    <Nav.Link>
+                                        <NavLink onClick={(e) => Logout(e)} to="/login" className="link-navbar">
+                                            Logout
+                                        </NavLink>
+                                    </Nav.Link>
+
+                                </Nav>
+                                :
+                                null
+                        }
                     </Navbar.Collapse>
                 </Container>
             </Navbar>

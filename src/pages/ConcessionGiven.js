@@ -1,7 +1,8 @@
 import moment from 'moment';
 import React, { useLayoutEffect, useState } from 'react';
-import { Table } from 'react-bootstrap';
+import { Table, Button } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import UserNavbar from '../components/userNavbar/UserNavbar';
 
 const ConcessionGiven = () => {
@@ -13,6 +14,12 @@ const ConcessionGiven = () => {
     useLayoutEffect(() => {
         authenticate();
     }, []);
+
+    const navigate = useNavigate()
+
+    const viewSingleConcessionGiven = (req, id) => {
+        navigate(`/admin/concession-application-approved/${id}`, { state: { req: req } })
+    }
     return (
         <div>
             {
@@ -20,13 +27,14 @@ const ConcessionGiven = () => {
                     <UserNavbar />
                     {
                         allApprovedConcessionReqs.length > 0 ?
-                            <Table className='verification-req' striped bordered hover>
+                            <Table className='verification-req container' striped bordered hover>
                                 <thead>
                                     <tr>
                                         <th>Sr.No</th>
                                         <th>Student Name</th>
                                         <th>Application Status</th>
                                         <th>Approved Date</th>
+                                        <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -36,20 +44,14 @@ const ConcessionGiven = () => {
                                             return (
                                                 <>
                                                     {
-                                                        req.applications.allApplications.map((item) => {
-                                                            if (item.applicationStatus === "Approved") {
-                                                                return (
-                                                                    <>
-                                                                        <tr>
-                                                                            <td>{i + 1}</td>
-                                                                            <td>{req.nameAsPerIdCard}</td>
-                                                                            <td>{item.applicationStatus}</td>
-                                                                            <td>{moment(item.applicationAcceptedOn).format('LL')} </td>
-                                                                        </tr>
-                                                                    </>
-                                                                )
-                                                            }
-                                                        })
+
+                                                        <tr>
+                                                            <td>{i + 1}</td>
+                                                            <td>{req.name}</td>
+                                                            <td>{req.applicationStatus}</td>
+                                                            <td>{moment(req.applicationAcceptedOn).format('LL')} </td>
+                                                            <td> <Button onClick={() => viewSingleConcessionGiven(req, req._id)} variant="success" size='sm'>View</Button></td>
+                                                        </tr>
                                                     }
                                                 </>
                                             )

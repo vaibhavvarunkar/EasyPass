@@ -6,6 +6,7 @@ import UserNavbar from '../components/userNavbar/UserNavbar';
 const AdminProfile = () => {
     const [auth, setAuth] = useState(false);
     const profileInfo = useSelector((state) => state.userReducer.userInfo);
+    console.log(profileInfo);
     const authenticate = () => {
         localStorage.getItem('token') ? setAuth(true) : setAuth(false);
     };

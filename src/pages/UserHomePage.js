@@ -15,8 +15,11 @@ const UserHomePage = () => {
             :
             setAuth(false)
     }
+    const userType = useSelector((state) => state.userReducer.userInfo.type);
     useLayoutEffect(() => {
-        authenticate()
+        if (userType === "student") {
+            authenticate()
+        }
     }, [])
 
     const routeToApplication = () => {

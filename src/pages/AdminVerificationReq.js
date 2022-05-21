@@ -54,7 +54,10 @@ const AdminVerificationReq = () => {
                                     }
                                 </>
                                     :
-                                    <h1>No Verification Requests</h1>
+                                    <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+                                        <h1>No Verification Requests</h1>
+                                    </div>
+
                             }
                         </tbody>
                     </Table>

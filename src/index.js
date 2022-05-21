@@ -24,6 +24,10 @@ import UserPastConcessionApplication from './pages/UserPastConcessionApplication
 import AdminAllConcessionApp from './pages/AdminAllConcessionApp';
 import AdminSingleConcessionApp from './pages/AdminSingleConcessionApp';
 import ConcessionGiven from './pages/ConcessionGiven';
+import TrainAdminHome from './pages/TrainAdmin/TrainAdminHome';
+import BusAdminHome from './pages/Bus Admin/BusAdminHome';
+import SingleVerifiedStudent from './pages/SingleVerifiedStudent';
+import SingleConcessionGiven from './pages/SingleConcessionGiven';
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
@@ -41,6 +45,7 @@ ReactDOM.render(
             <Route path="/admin/student-verification" element={<AdminVerificationReq />} />
             <Route path="/admin/student-verification/:id" element={<StudentVerificationSingle />} />
             <Route path="/admin/verified-students" element={<VerifiedStudents />} />
+            <Route path="/admin/verified-students/:id" element={<SingleVerifiedStudent />} />
             <Route path="/admin/all-concession-applications" element={<AdminAllConcessionApp />}></Route>
             <Route path="/admin/all-concession-application/:id" element={<AdminSingleConcessionApp />}></Route>
             <Route path="/admin/approved-concession-application" element={<ConcessionGiven />} ></Route>
@@ -48,6 +53,11 @@ ReactDOM.render(
             <Route path="/user/travel-pass/applications/new-application" element={<NewPassApplication />}></Route>
             <Route path="/user/travel-pass/applications/past-applications" element={<PassHistoryApplications />}></Route>
             <Route path="/user/travel-pass/applications/past-applications/:id" element={<UserPastConcessionApplication />}></Route>
+            <Route path="/admin/train/home" element={<TrainAdminHome />}></Route>
+            <Route path="/admin/bus/home" element={<BusAdminHome />}></Route>
+            <Route path="/admin/concession-application-approved/:id" element={<SingleConcessionGiven />}></Route>
+            <Route path="/admin/train/profile" element={<AdminProfile />} />
+            <Route path="/admin/bus/profile" element={<AdminProfile />} />
 
           </Routes>
         </Router>

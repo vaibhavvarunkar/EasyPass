@@ -11,7 +11,12 @@ const PassHistoryApplications = () => {
     const authenticate = () => {
         localStorage.getItem('token') ? setAuth(true) : setAuth(false);
     };
-    const userApplications = useSelector((state) => state.userReducer.profileInfo.applications.allApplications);
+
+
+    const userApplications = useSelector((state) => state.userReducer.profileInfo)
+    // const pastApplications = useSelector((state) => state.userReducer.profileInfo.applications.allApplications)
+
+
     useLayoutEffect(() => {
         authenticate();
     }, []);
@@ -43,9 +48,9 @@ const PassHistoryApplications = () => {
                                     </thead>
                                     <tbody>
                                         {
-                                            userApplications.length > 0 ? <>
+                                            userApplications.applications.allApplications.length > 0 ? <>
                                                 {
-                                                    userApplications.map((req, i) => {
+                                                    userApplications.applications.allApplications.map((req, i) => {
                                                         return (
                                                             <>
                                                                 <tr>

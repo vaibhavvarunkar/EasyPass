@@ -105,15 +105,6 @@ const UserPastConcessionApplication = () => {
                             <img className='address-doc' src={required_application[0].addressProof}></img>
 
                         </Form>
-                        <div className='download-pdf'>
-                            {
-                                required_application[0].applicationStatus === "Approved" ?
-                                    <Button size='md' onClick={() => downloadPdf()} variant='success'>Click Here To Download Your Concession Letter</Button>
-
-                                    :
-                                    null
-                            }
-                        </div>
                         <br></br>
                     </div>
                 </>

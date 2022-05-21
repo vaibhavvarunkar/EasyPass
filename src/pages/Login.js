@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useState } from 'react';
 import Navbar1 from '../components/navbar/Navbar1';
 import '../styles/login.css';
 import Select from 'react-select';
@@ -8,18 +8,18 @@ import { API_ROOT } from '../constants';
 import { useNavigate } from 'react-router-dom';
 import SuccessRegister from './SuccessRegister';
 import Loader from '../components/loader/Loader';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { saveUserInfo, userProfileInfo } from '../redux/actions/UserActions';
 import { getApprovedConcessionReq, getConcessionReq, getVerificationReq, getVerifiedProfiles } from '../redux/actions/AdminActions';
+import createUtilityClassName from 'react-bootstrap/esm/createUtilityClasses';
 
 const Login = () => {
     const navigate = useNavigate()
+    const userType = useSelector((state) => state.userReducer.userInfo.type);
+    console.log(userType);
 
-    useEffect(() => {
-        if (localStorage.getItem("token")) {
-            navigate("/user/home")
-        }
-    }, [navigate])
+
+
     const dispatch = useDispatch()
     const [user, setUser] = useState({});
     const [name, setName] = useState("")
@@ -33,7 +33,7 @@ const Login = () => {
     const loginOptions = [
         { value: 'student', label: 'Student' },
         { value: 'college admin', label: 'College Admin' },
-        { value: 'railway admin', label: 'Railway Admin' },
+        { value: 'train admin', label: 'Train Admin' },
         { value: 'bus admin', label: 'Bus Admin' },
     ];
 
@@ -84,13 +84,18 @@ const Login = () => {
         const config = {
             headers: { Authorization: `Bearer ${token}` }
         };
-        const res = await axios.get(
-            `${API_ROOT}/profile/current`,
-            config
-        )
-        if (res.data.status === 200) {
-            console.log(res);
-            dispatch(userProfileInfo(res.data.profile))
+        try {
+            const res = await axios.get(
+                `${API_ROOT}/profile/current`,
+                config
+            )
+            if (res.data.status === 200) {
+                console.log(res);
+                dispatch(userProfileInfo(res.data.profile))
+            }
+        }
+        catch (err) {
+            console.log(err);
         }
     }
 
@@ -106,8 +111,8 @@ const Login = () => {
             )
             console.log(res);
             if (res.data.status === 200) {
-                dispatch(getConcessionReq(res.data.unapprovedProfiles))
-                dispatch(getApprovedConcessionReq(res.data.approveddProfiles))
+                dispatch(getConcessionReq(res.data.unapprovedApps))
+                dispatch(getApprovedConcessionReq(res.data.approvedApps))
             }
         }
         catch (err) {
@@ -137,7 +142,7 @@ const Login = () => {
     }
     const handleLogin = async (e) => {
         e.preventDefault()
-        if (user.value === "student" || user.value === "college admin") {
+        if (user.value === "student" || user.value === "college admin" || user.value === "train admin" || user.value === "bus admin") {
             const body = {
                 "email": email,
                 "password": password,
@@ -148,17 +153,32 @@ const Login = () => {
                 const res = await axios.post(`${API_ROOT}/user/signin`, body)
                 if (res.data.status === 200) {
                     console.log(res);
-                    dispatch(saveUserInfo(res.data.result))
-                    localStorage.setItem("token", res.data.token)
                     if (res.data.result.type === "student") {
+                        localStorage.setItem("token", res.data.token)
+                        dispatch(saveUserInfo(res.data.result))
                         getUserProfile()
                         naviagte("/user/home")
                         setLoading(false)
                     }
-                    if (res.data.result.type === "college admin") {
+                    else if (res.data.result.type === "college admin") {
+                        localStorage.setItem("token", res.data.token)
+                        dispatch(saveUserInfo(res.data.result))
                         getStudentVerificationReqs()
                         getStudentConcessionReqs()
                         naviagte("/admin/home")
+                        setLoading(false)
+
+                    }
+                    else if (res.data.result.type === "train admin") {
+                        localStorage.setItem("token", res.data.token)
+                        dispatch(saveUserInfo(res.data.result))
+                        naviagte("/admin/train/home")
+                        setLoading(false)
+                    }
+                    else if (res.data.result.type === "bus admin") {
+                        localStorage.setItem("token", res.data.token)
+                        dispatch(saveUserInfo(res.data.result))
+                        naviagte("/admin/bus/home")
                         setLoading(false)
                     }
                 }
@@ -172,9 +192,6 @@ const Login = () => {
                 setLoading(false)
             }
         }
-        else if (user.value === "college admin") {
-        }
-
     }
 
     const handleSubmit = (e) => {
@@ -191,8 +208,25 @@ const Login = () => {
         setSuccessPopup(false)
         setRegister(false)
     }
+
+    const callMe = () => {
+        if (localStorage.getItem("token")) {
+            if (userType === "student") {
+                naviagte("/user/home")
+            }
+            if (userType === "train admin") {
+                naviagte("/admin/train/home")
+            }
+            if (userType === "college admin") {
+                naviagte("/admin/home")
+            }
+        }
+    }
     return (
         <>
+            {
+                callMe()
+            }
             <Navbar1 />
             {
                 loading ? <div className='loader-main'>

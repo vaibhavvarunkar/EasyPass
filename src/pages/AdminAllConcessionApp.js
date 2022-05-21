@@ -50,8 +50,8 @@ const AdminAllConcessionApp = () => {
                                                                     <>
                                                                         <tr>
                                                                             <td>{i + 1}</td>
-                                                                            <td>{req.nameAsPerIdCard}</td>
-                                                                            <td style={{ color: "red", fontWeight: "600" }}>{req.applications.currentApplication.applicationStatus}</td>
+                                                                            <td>{req.name}</td>
+                                                                            <td style={{ color: "red", fontWeight: "600" }}>{req.applicationStatus}</td>
                                                                             <td><Button onClick={() => viewConcessionReq(req, req._id)} variant="success" size='sm'>View</Button></td>
                                                                         </tr>
                                                                     </>
@@ -62,7 +62,10 @@ const AdminAllConcessionApp = () => {
                                                 </Table>
                                             </>
                                             :
-                                            <h1>No New Reqs</h1>
+                                            <div style={{ display: "flex", justifyContent: "center" }}>
+                                                <h1>No New Reqs</h1>
+                                            </div>
+
                                     }
                                 </>
 

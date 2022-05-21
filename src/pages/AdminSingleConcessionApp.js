@@ -42,11 +42,11 @@ const AdminSingleConcessionApp = () => {
                 config
             )
             console.log(res);
-            if (res.data.status === "Successfully Verified!") {
+            if (res.data.status === 200) {
                 navigate("/admin/all-concession-applications")
                 setIsLoading(false)
-                dispatch(getConcessionReq(res.data.unApproovedProfiles))
-                dispatch(getApprovedConcessionReq(res.data.approoveddProfiles))
+                dispatch(getConcessionReq(res.data.unapprovedApps))
+                dispatch(getApprovedConcessionReq(res.data.approvedApps))
                 alert("Successfully Verified!")
             }
         }
@@ -72,7 +72,7 @@ const AdminSingleConcessionApp = () => {
                                             <Form.Group>
                                                 <Form.Label>Student Name</Form.Label>
                                                 <Form.Control
-                                                    value={location.state.req.nameAsPerIdCard}
+                                                    value={location.state.req.name}
                                                     type='text'
                                                     placeholder='Talegaon Railway Station / Nigdi Bus Stop'
                                                 />
@@ -80,7 +80,7 @@ const AdminSingleConcessionApp = () => {
                                             <Form.Group>
                                                 <Form.Label>Application Status</Form.Label>
                                                 <Form.Control
-                                                    value={location.state.req.applications.currentApplication.applicationStatus}
+                                                    value={location.state.req.applicationStatus}
                                                     type='text'
                                                     placeholder='Talegaon Railway Station / Nigdi Bus Stop'
                                                 />
@@ -88,7 +88,7 @@ const AdminSingleConcessionApp = () => {
                                             <Form.Group>
                                                 <Form.Label>Application Date</Form.Label>
                                                 <Form.Control
-                                                    value={moment(location.state.req.applications.currentApplication.appliedOn).format('LL')}
+                                                    value={moment(location.state.req.appliedOn).format('LL')}
                                                     type='text'
                                                     placeholder='Talegaon Railway Station / Nigdi Bus Stop'
                                                 />
@@ -96,7 +96,7 @@ const AdminSingleConcessionApp = () => {
                                             <Form.Group>
                                                 <Form.Label>Selected Travel Option</Form.Label>
                                                 <Form.Control
-                                                    value={location.state.req.applications.currentApplication.travelOption}
+                                                    value={location.state.req.travelOption}
                                                     type='text'
                                                     placeholder='Talegaon Railway Station / Nigdi Bus Stop'
                                                 />
@@ -107,7 +107,7 @@ const AdminSingleConcessionApp = () => {
                                             >
                                                 <Form.Label>Start Location</Form.Label>
                                                 <Form.Control
-                                                    value={location.state.req.applications.currentApplication.startLocation}
+                                                    value={location.state.req.startLocation}
                                                     type='text'
                                                     placeholder='Talegaon Railway Station / Nigdi Bus Stop'
                                                 />
@@ -118,7 +118,7 @@ const AdminSingleConcessionApp = () => {
                                             >
                                                 <Form.Label>End Location</Form.Label>
                                                 <Form.Control
-                                                    value={location.state.req.applications.currentApplication.endLocation}
+                                                    value={location.state.req.endLocation}
                                                     type='text'
                                                     placeholder='Chinchwad Railway Station / Talegaon Bus Stop'
                                                 />
@@ -129,7 +129,7 @@ const AdminSingleConcessionApp = () => {
                                             >
                                                 <Form.Label>Uploaded Address Proof</Form.Label>
                                             </Form.Group>
-                                            <img className='address-doc' src={location.state.req.applications.currentApplication.addressProof}></img>
+                                            <img className='address-doc' src={location.state.req.addressProof}></img>
                                         </Form>
                                     </div>
                                     <div style={{ display: "flex", justifyContent: "center", alignItems: "center", marginTop: "1rem" }}>

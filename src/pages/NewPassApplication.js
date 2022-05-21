@@ -33,8 +33,7 @@ const NewPassApplication = () => {
     const [auth, setAuth] = useState(false);
     const userEmail = useSelector((state) => state.userReducer.userInfo.email);
     const profileInfo = useSelector((state) => state.userReducer.profileInfo);
-    const lastApplication = useSelector((state) => state.userReducer.profileInfo.applications.currentApplication);
-    console.log(lastApplication);
+    // const lastApplication = useSelector((state) => state.userReducer.profileInfo.applications.currentApplication);
 
     const authenticate = () => {
         localStorage.getItem('token') ? setAuth(true) : setAuth(false);
@@ -82,7 +81,7 @@ const NewPassApplication = () => {
             form.append('travelOption', travelMethod);
             form.append('startLocation', pickUpLocation);
             form.append('endLocation', dropLocation);
-            form.append('trvelPassPeriod', passPeriod);
+            form.append('travelPassPeriod', passPeriod);
             try {
                 const res = await axios.post(
                     `${API_ROOT}/profile/newapp`,
@@ -126,122 +125,113 @@ const NewPassApplication = () => {
                         </div>
                     ) : (
                         <div className='new-application-page'>
-                            {
-                                lastApplication === undefined || lastApplication.applicationStatus === "Approved" ?
-                                    <>
-                                        {profileInfo.profileVerifystatus === 'Verified' ? (
-                                            <Form>
-                                                <Form.Group
-                                                    className='mb-3'
-                                                    controlId='exampleForm.ControlInput1'
-                                                >
-                                                    <Form.Label>Email address</Form.Label>
-                                                    <Form.Control
-                                                        value={userEmail}
-                                                        type='email'
-                                                        placeholder='name@example.com'
-                                                        readOnly
-                                                    />
-                                                </Form.Group>
-                                                <Form.Group
-                                                    className='mb-3'
-                                                    controlId='exampleForm.ControlInput1'
-                                                >
-                                                    <Form.Label>Name As Per ID Card</Form.Label>
-                                                    <Form.Control
-                                                        value={profileInfo.nameAsPerIdCard}
-                                                        type='text'
-                                                        placeholder='name@example.com'
-                                                        readOnly
-                                                    />
-                                                </Form.Group>
-                                                <Form.Group>
-                                                    <Form.Label>Select Your Travel Option</Form.Label>
-                                                    <Select
-                                                        onChange={(e) => travelOptionSelection(e)}
-                                                        className='dropdown-location'
-                                                        options={travelOptions}
-                                                        placeholder={'Select Travel Option'}
-                                                        required
-                                                    ></Select>
-                                                </Form.Group>
-                                                <Form.Group
-                                                    className='mb-3'
-                                                    controlId='exampleForm.ControlInput1'
-                                                >
-                                                    <Form.Label>Start Location</Form.Label>
-                                                    <Form.Control
-                                                        onChange={(e) => setLocation1(e)}
-                                                        type='text'
-                                                        placeholder='Talegaon Railway Station / Nigdi Bus Stop'
-                                                    />
-                                                </Form.Group>
-                                                <Form.Group
-                                                    className='mb-3'
-                                                    controlId='exampleForm.ControlInput1'
-                                                >
-                                                    <Form.Label>End Location</Form.Label>
-                                                    <Form.Control
-                                                        onChange={(e) => setLocation2(e)}
-                                                        type='text'
-                                                        placeholder='Chinchwad Railway Station / Talegaon Bus Stop'
-                                                    />
-                                                </Form.Group>
-                                                <Form.Group>
-                                                    <Form.Label>Travel Pass Period</Form.Label>
-                                                    <Select
-                                                        className='dropdown-location'
-                                                        options={PeriodOptions}
-                                                        onChange={(e) => travelPeriodSelect(e)}
-                                                        placeholder={'Select Period Of Your Pass'}
-                                                        required
-                                                    ></Select>
-                                                </Form.Group>
-                                                <Form.Group
-                                                    className='mb-3'
-                                                    controlId='exampleForm.ControlInput1'
-                                                >
-                                                    <Form.Label>Upload Address Proof</Form.Label>
-                                                    <Form.Control
-                                                        onChange={(e) => addressProof(e)}
-                                                        accept='.png, .jpg, .jpeg, .pdf'
-                                                        type='file'
-                                                        placeholder='Address Proof'
-                                                        required
-                                                    />
-                                                </Form.Group>
-                                                {addressProofDoc === null ? null : (
-                                                    <img className='address-doc' src={preview}></img>
-                                                )}
-                                                <Button
-                                                    onClick={(e) => submitApplication(e)}
-                                                    style={{
-                                                        display: 'block',
-                                                        marginTop: '1.4rem',
-                                                        width: '100px',
-                                                    }}
-                                                    variant='primary'
-                                                    type='submit'
-                                                >
-                                                    Apply
-                                                </Button>
-                                            </Form>
-                                        ) : (
-                                            <h3 className='verify-error'>
-                                                Please make a profile first and send it for verification
-                                            </h3>
+
+                            <>
+                                {profileInfo.profileVerifystatus === 'Verified' && profileInfo !== null ? (
+                                    <Form>
+                                        <Form.Group
+                                            className='mb-3'
+                                            controlId='exampleForm.ControlInput1'
+                                        >
+                                            <Form.Label>Email address</Form.Label>
+                                            <Form.Control
+                                                value={userEmail}
+                                                type='email'
+                                                placeholder='name@example.com'
+                                                readOnly
+                                            />
+                                        </Form.Group>
+                                        <Form.Group
+                                            className='mb-3'
+                                            controlId='exampleForm.ControlInput1'
+                                        >
+                                            <Form.Label>Name As Per ID Card</Form.Label>
+                                            <Form.Control
+                                                value={profileInfo.nameAsPerIdCard}
+                                                type='text'
+                                                placeholder='name@example.com'
+                                                readOnly
+                                            />
+                                        </Form.Group>
+                                        <Form.Group>
+                                            <Form.Label>Select Your Travel Option</Form.Label>
+                                            <Select
+                                                onChange={(e) => travelOptionSelection(e)}
+                                                className='dropdown-location'
+                                                options={travelOptions}
+                                                placeholder={'Select Travel Option'}
+                                                required
+                                            ></Select>
+                                        </Form.Group>
+                                        <Form.Group
+                                            className='mb-3'
+                                            controlId='exampleForm.ControlInput1'
+                                        >
+                                            <Form.Label>Start Location</Form.Label>
+                                            <Form.Control
+                                                onChange={(e) => setLocation1(e)}
+                                                type='text'
+                                                placeholder='Talegaon Railway Station / Nigdi Bus Stop'
+                                            />
+                                        </Form.Group>
+                                        <Form.Group
+                                            className='mb-3'
+                                            controlId='exampleForm.ControlInput1'
+                                        >
+                                            <Form.Label>End Location</Form.Label>
+                                            <Form.Control
+                                                onChange={(e) => setLocation2(e)}
+                                                type='text'
+                                                placeholder='Chinchwad Railway Station / Talegaon Bus Stop'
+                                            />
+                                        </Form.Group>
+                                        <Form.Group>
+                                            <Form.Label>Travel Pass Period</Form.Label>
+                                            <Select
+                                                className='dropdown-location'
+                                                options={PeriodOptions}
+                                                onChange={(e) => travelPeriodSelect(e)}
+                                                placeholder={'Select Period Of Your Pass'}
+                                                required
+                                            ></Select>
+                                        </Form.Group>
+                                        <Form.Group
+                                            className='mb-3'
+                                            controlId='exampleForm.ControlInput1'
+                                        >
+                                            <Form.Label>Upload Address Proof</Form.Label>
+                                            <Form.Control
+                                                onChange={(e) => addressProof(e)}
+                                                accept='.png, .jpg, .jpeg, .pdf'
+                                                type='file'
+                                                placeholder='Address Proof'
+                                                required
+                                            />
+                                        </Form.Group>
+                                        {addressProofDoc === null ? null : (
+                                            <img className='address-doc' src={preview}></img>
                                         )}
-                                    </>
-                                    :
-                                    <>
-                                        {
-                                            lastApplication.applicationStatus === "Under Process" ?
-                                                <h1 style={{ margin: "auto" }}>You already have one application under process.</h1>
-                                                :
-                                                <h3>Please make a profile first and send it for verification</h3>
-                                        }
-                                    </>
-                            }
+                                        <Button
+                                            onClick={(e) => submitApplication(e)}
+                                            style={{
+                                                display: 'block',
+                                                marginTop: '1.4rem',
+                                                width: '100px',
+                                            }}
+                                            variant='primary'
+                                            type='submit'
+                                        >
+                                            Apply
+                                        </Button>
+                                    </Form>
+                                ) : (
+                                    <h3 className='verify-error'>
+                                        Please make a profile first and send it for verification
+                                    </h3>
+                                )}
+                            </>
+                            :
+
                         </div>
                     )}
                     {

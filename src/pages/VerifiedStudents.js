@@ -2,6 +2,7 @@ import moment from 'moment';
 import React, { useLayoutEffect, useState } from 'react'
 import { Button, Table } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import UserNavbar from '../components/userNavbar/UserNavbar';
 
 const VerifiedStudents = () => {
@@ -13,9 +14,14 @@ const VerifiedStudents = () => {
         authenticate()
     })
 
-    const verifiedStudents = useSelector((state) => state.userReducer.getVerifiedProfiles);
+    const navigate = useNavigate()
 
-    console.log(verifiedStudents);
+    const verifiedStudents = useSelector((state) => state.userReducer.getVerifiedProfiles);
+    console.log(verifiedStudents)
+
+    const viewSingleVerified = (req, id) => {
+        navigate(`/admin/verified-students/${id}`, { state: { req: req } })
+    }
     return (
         <div>
             {
@@ -30,7 +36,7 @@ const VerifiedStudents = () => {
                                     <th>College Name</th>
                                     <th>Verification Status</th>
                                     <th>Verification Date</th>
-                                    {/* <th>Action</th> */}
+                                    <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -38,6 +44,7 @@ const VerifiedStudents = () => {
                                     verifiedStudents.length ? <>
                                         {
                                             verifiedStudents.map((req, i) => {
+                                                console.log(req)
                                                 return (
                                                     <>
                                                         <tr>
@@ -46,11 +53,12 @@ const VerifiedStudents = () => {
                                                             <td>{req.collegeName}</td>
                                                             <td style={{ color: "green", fontWeight: "600" }}>{req.profileVerifystatus}</td>
                                                             {
-                                                                req.profileVerifyDate.length > 1 ?
+                                                                req.date.length > 1 ?
                                                                     <td>{moment(req.profileVerifyDate).format('LL')} </td>
                                                                     :
                                                                     <td>Not Available</td>
                                                             }
+                                                            <td><Button onClick={() => viewSingleVerified(req, req._id)} variant="success" size='sm'>View</Button></td>
                                                         </tr>
                                                     </>
                                                 )
