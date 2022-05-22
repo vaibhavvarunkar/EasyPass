@@ -1,9 +1,11 @@
+import axios from 'axios'
 import React, { useLayoutEffect, useState } from 'react'
 import { Button } from 'react-bootstrap'
 import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import UserNavbar from '../components/userNavbar/UserNavbar'
 import "../styles/userHomepage.css"
+import { API_ROOT } from '../constants';
 
 const UserHomePage = () => {
     const navigate = useNavigate()
@@ -34,6 +36,7 @@ const UserHomePage = () => {
                         <div className='user-home'>
                             <h3>Welcome, {userName} !</h3>
                             <Button onClick={() => routeToApplication()}>Manage Your Applications</Button>
+
                         </div>
                     </>
                     :

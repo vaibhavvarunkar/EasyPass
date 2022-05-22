@@ -5,8 +5,10 @@ import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import UserNavbar from '../components/userNavbar/UserNavbar';
 import { API_ROOT } from '../constants';
+import Loader from '../components/loader/Loader';
 
 const PassApplication = () => {
+    const [loading, setLoading] = useState(false)
     const [auth, setAuth] = useState(false);
     const navigate = useNavigate();
 
@@ -60,6 +62,7 @@ const PassApplication = () => {
     }
 
     const handlePayment = async () => {
+        setLoading(true)
         const token = await localStorage.getItem("token")
         const config = {
             headers: { Authorization: `Bearer ${token}` }
@@ -77,6 +80,7 @@ const PassApplication = () => {
         catch (err) {
             console.log(err)
         }
+        setLoading(false)
     }
 
     return (
@@ -85,31 +89,43 @@ const PassApplication = () => {
                 <>
                     <UserNavbar />
                     {
-                        currentApplication.length === 0 ?
-                            <>
-                                <h1 style={{ textAlign: "center" }}>Please Create A Profile First</h1>
-                            </>
+                        loading ? <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100%" }}>
+                            <Loader style={{ alignSelf: "center" }} />
+                        </div>
                             :
                             <>
                                 {
-                                    currentApplication.profileVerifystatus === "Verified" ?
+                                    currentApplication.length === 0 ?
                                         <>
-                                            <div className='admin-home-page'>
-                                                <Button style={{ backgroundColor: "Red", border: "none" }} className='admin-btn' onClick={() => navigateToNewApplication()}>1. Click Here To Apply For A New Travel Pass</Button>
-                                                <Button style={{ backgroundColor: "Green", border: "none" }} className='admin-btn' onClick={() => navigateToPastApplication()}>2. Click Here To View Your Past Travel Pass Applications</Button>
-                                                {
-                                                    currentApplication.applications.allApplications.length > 0 ?
-                                                        <Button onClick={() => handlePayment()} className='admin-btn' style={{ backgroundColor: "Purple", border: "none" }}>3. Pay <span style={{ fontWeight: "700", color: "Yellow", margin: "0 10px" }}> &#8377; {currentApplication.applications.currentApplication.amount}</span>  For Your Last Pass Application</Button>
-                                                        :
-                                                        null
-                                                }
-                                            </div>
+                                            <h1 style={{ textAlign: "center" }}>Please Create A Profile First</h1>
                                         </>
                                         :
-                                        <h1 style={{ textAlign: "center" }}>Wait Until Your Profile Gets Verified</h1>
+                                        <>
+                                            {
+                                                currentApplication.profileVerifystatus === "Verified" ?
+                                                    <>
+                                                        <div className='admin-home-page'>
+                                                            <Button style={{ backgroundColor: "Red", border: "none" }} className='admin-btn' onClick={() => navigateToNewApplication()}>1. Click Here To Apply For A New Travel Pass</Button>
+                                                            <Button style={{ backgroundColor: "Green", border: "none" }} className='admin-btn' onClick={() => navigateToPastApplication()}>2. Click Here To View Your Past Travel Pass Applications</Button>
+                                                            {
+                                                                currentApplication.applications.allApplications.length > 0 ?
+                                                                    <>
+                                                                        {currentApplication.applications.currentApplication.amountPaid === false ? <Button onClick={() => handlePayment()} className='admin-btn' style={{ backgroundColor: "Purple", border: "none" }}>3. Pay <span style={{ fontWeight: "700", color: "Yellow", margin: "0 10px" }}> &#8377; {currentApplication.applications.currentApplication.amount}</span>  For Your Last Pass Application</Button> :
+                                                                            null}
+                                                                    </>
+                                                                    :
+                                                                    null
+                                                            }
+                                                        </div>
+                                                    </>
+                                                    :
+                                                    <h1 style={{ textAlign: "center" }}>Wait Until Your Profile Gets Verified</h1>
+                                            }
+                                        </>
+
+
                                 }
                             </>
-
                     }
 
                 </>
