@@ -1,16 +1,18 @@
 import axios from 'axios';
 import React, { useLayoutEffect, useState } from 'react';
 import { Button } from 'react-bootstrap';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import UserNavbar from '../components/userNavbar/UserNavbar';
 import { API_ROOT } from '../constants';
 import Loader from '../components/loader/Loader';
+import { userProfileInfo } from '../redux/actions/UserActions';
 
 const PassApplication = () => {
     const [loading, setLoading] = useState(false)
     const [auth, setAuth] = useState(false);
     const navigate = useNavigate();
+    const dispatch = useDispatch()
 
     const authenticate = () => {
         localStorage.getItem('token') ? setAuth(true) : setAuth(false);
@@ -41,16 +43,18 @@ const PassApplication = () => {
             description: "test",
             order_id: data.id,
             prefill: {
-                'contact': '8888888888',
-                'email': 'test@razorpay.com',
+                'email': currentApplication.email,
             },
             handler: async (resp) => {
                 try {
                     const res = await axios.post(`${API_ROOT}/profile/paymentVerify`, resp, config)
-                    console.log(res);
+                    if (res.data.status === 200) {
+                        alert("Payment Successful ! Check your mail for details or go to your applications.")
+                        dispatch(userProfileInfo(res.data.response))
+                    }
                 }
                 catch (err) {
-                    console.log(err);
+                    alert(err);
                 }
             },
             theme: {

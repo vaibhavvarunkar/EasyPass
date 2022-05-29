@@ -47,7 +47,7 @@ const AdminSingleConcessionApp = () => {
                 setIsLoading(false)
                 dispatch(getConcessionReq(res.data.unapprovedApps))
                 dispatch(getApprovedConcessionReq(res.data.approvedApps))
-                alert("Successfully Verified!")
+                alert("Successfully Approved!")
             }
         }
         catch (err) {
