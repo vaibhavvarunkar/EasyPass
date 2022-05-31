@@ -509,10 +509,15 @@ const UserProfilePage = () => {
                             <br></br>
 
                             {
-                                profileInfo.passinfo !== undefined || profileInfo.passinfo.length > 0 ?
-                                    <div style={{ display: "flex", justifyContent: "center" }}>
-                                        <Button variant='success' onClick={() => downloadPdf()}>Download Pass</Button>
-                                    </div> : null
+                                profileInfo.passinfo === undefined ?
+                                    null
+                                    :
+                                    profileInfo.passinfo !== undefined || profileInfo.passinfo.length > 0 ?
+                                        <div style={{ display: "flex", justifyContent: "center" }}>
+                                            <Button variant='success' onClick={() => downloadPdf()}>Download Pass</Button>
+                                        </div>
+                                        :
+                                        null
                             }
                             <br></br>
                             <br></br>
