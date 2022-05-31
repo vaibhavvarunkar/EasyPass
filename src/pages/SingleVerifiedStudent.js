@@ -22,11 +22,27 @@ const SingleVerifiedStudent = () => {
     const location = useLocation();
     return (
         <div>
+            {/* {console.log(location.state.req.profilePic)} */}
             {
                 auth ? <>
                     <UserNavbar />
                     <div className='past-concession-letter-app'>
                         <Form className='past-form'>
+                            {
+                                location.state.req.profilePic !== undefined ? <>  <Form.Group className='mb-3' controlId='formBasicPassword'>
+                                    <Form.Label>Profile Pic</Form.Label>
+                                </Form.Group>
+                                    <div>
+                                        <img
+                                            src={location.state.req.profilePic}
+                                            alt='Id-Card'
+                                            style={{ height: '200px', width: '200px', margin: 'auto' }}
+                                        ></img>
+                                    </div>
+                                </>
+                                    :
+                                    null
+                            }
                             <Form.Group>
                                 <Form.Label>Student Name</Form.Label>
                                 <Form.Control

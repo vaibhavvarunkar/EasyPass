@@ -1,25 +1,24 @@
-import moment from 'moment';
-import React, { useLayoutEffect, useState } from 'react';
-import { Button, Table } from 'react-bootstrap';
+import React, { useLayoutEffect, useState } from 'react'
+import { Table, Button } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import UserNavbar from '../components/userNavbar/UserNavbar';
+import UserNavbar from '../../components/userNavbar/UserNavbar';
 
-const AdminAllConcessionApp = () => {
+const TrainAdminApprovedReqs = () => {
     const [auth, setAuth] = useState(false);
-    const navigate = useNavigate()
+    const navigate = useNavigate();
     const authenticate = () => {
         localStorage.getItem('token') ? setAuth(true) : setAuth(false);
     };
+
+    const busPassReqs = useSelector((state) => state.userReducer.getApprovedPassReqsTrain)
+
     useLayoutEffect(() => {
-        authenticate();
-    }, []);
+        authenticate()
+    })
 
-    const allConcessionReqs = useSelector((state) => state.userReducer.getConcessionReqs)
-
-    const viewConcessionReq = (req, id) => {
-        console.log(id);
-        navigate(`/admin/all-concession-application/${req.name}`, { state: { req: req } })
+    const viewPassPage = (req) => {
+        navigate(`/admin/train/train-approved-pass-requests/${req.paymentId}`, { state: { req: req } })
     }
     return (
         <>
@@ -29,31 +28,31 @@ const AdminAllConcessionApp = () => {
                         <UserNavbar />
 
                         {
-                            allConcessionReqs !== undefined ?
+                            busPassReqs !== undefined ?
                                 <>
                                     {
-                                        allConcessionReqs.length > 0 ?
+                                        busPassReqs.length > 0 ?
                                             <>
                                                 <Table className='verification-req' striped bordered hover>
                                                     <thead>
                                                         <tr>
                                                             <th>Sr.No</th>
                                                             <th>Student Name</th>
-                                                            <th>Application Status</th>
+                                                            <th>Pass Application Status</th>
                                                             <th>Action</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
                                                         {
-                                                            allConcessionReqs.map((req, i) => {
+                                                            busPassReqs.map((req, i) => {
                                                                 console.log(req)
                                                                 return (
                                                                     <>
                                                                         <tr>
                                                                             <td>{i + 1}</td>
                                                                             <td>{req.name}</td>
-                                                                            <td style={{ color: "red", fontWeight: "600" }}>{req.applicationStatus}</td>
-                                                                            <td><Button onClick={() => viewConcessionReq(req)} variant="success" size='sm'>View</Button></td>
+                                                                            <td style={{ color: "green", fontWeight: "600" }}>{req.passGiven === false ? "Pending" : "Approved"}</td>
+                                                                            <td><Button onClick={() => viewPassPage(req)} variant="success" size='sm'>View</Button></td>
                                                                         </tr>
                                                                     </>
                                                                 )
@@ -79,6 +78,6 @@ const AdminAllConcessionApp = () => {
             }
         </>
     )
-};
+}
 
-export default AdminAllConcessionApp;
+export default TrainAdminApprovedReqs

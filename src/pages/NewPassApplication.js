@@ -15,7 +15,7 @@ const NewPassApplication = () => {
     const dispatch = useDispatch()
     const [travelMethod, setTravelMethod] = useState(null);
     const [pickUpLocation, setPickUpLocation] = useState(null);
-    const [dropLocation, setDropLocation] = useState(null);
+    const [dropLocation, setDropLocation] = useState("Talegaon");
     const [passPeriod, setPassPeriod] = useState(null);
     const [preview, setPreview] = useState(null);
     const [addressProofDoc, setAddressProofDoc] = useState(null);
@@ -71,7 +71,6 @@ const NewPassApplication = () => {
             addressProofDoc !== null &&
             travelMethod !== null &&
             pickUpLocation !== null &&
-            dropLocation !== null &&
             passPeriod !== null
         ) {
             setLoading(true);
@@ -180,6 +179,7 @@ const NewPassApplication = () => {
                                         >
                                             <Form.Label>End Location</Form.Label>
                                             <Form.Control
+                                                value={"Talegaon"}
                                                 onChange={(e) => setLocation2(e)}
                                                 type='text'
                                                 placeholder='Chinchwad Railway Station / Talegaon Bus Stop'

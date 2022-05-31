@@ -2,7 +2,7 @@ import React from 'react'
 import { Container, Nav, Navbar } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux';
 import { NavLink, useNavigate } from 'react-router-dom';
-import { clearApprovedConcessionReq, clearConcessionReq, clearVerificationReq, clearVerifiedProfiles } from '../../redux/actions/AdminActions';
+import { clearApprovedConcessionReq, clearConcessionReq, clearGetApprovedBusPassReqs, clearGetApprovedTrainPassReqs, clearGetBusPassReqs, clearGetTrainPassReqs, clearVerificationReq, clearVerifiedProfiles } from '../../redux/actions/AdminActions';
 import { clearUserInfo, clearUserProfileInfo } from '../../redux/actions/UserActions';
 
 const UserNavbar = () => {
@@ -17,6 +17,10 @@ const UserNavbar = () => {
         dispatch(clearVerifiedProfiles())
         dispatch(clearConcessionReq())
         dispatch(clearApprovedConcessionReq())
+        dispatch(clearGetBusPassReqs())
+        dispatch(clearGetApprovedBusPassReqs())
+        dispatch(clearGetTrainPassReqs())
+        dispatch(clearGetApprovedTrainPassReqs())
         localStorage.removeItem("token")
         navigate("/login")
     }

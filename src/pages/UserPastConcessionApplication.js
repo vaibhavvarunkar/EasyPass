@@ -8,6 +8,7 @@ import UserNavbar from '../components/userNavbar/UserNavbar';
 import "../styles/userPastConcessionApplication.css"
 import { API_ROOT } from '../constants';
 import Loader from '../components/loader/Loader';
+import { jsPDF } from "jspdf";
 
 const UserPastConcessionApplication = () => {
     const [details, setDetails] = useState([])
@@ -23,6 +24,8 @@ const UserPastConcessionApplication = () => {
         localStorage.getItem('token') ? setAuth(true) : setAuth(false);
     };
 
+    const profile = useSelector((state) => state.userReducer.profileInfo)
+    console.log(profile);
     useLayoutEffect(() => {
         authenticate();
     }, []);
@@ -51,6 +54,25 @@ const UserPastConcessionApplication = () => {
             alert(err)
         }
         setLoading(false)
+    }
+    const downloadPdf = () => {
+        var doc = new jsPDF("p", "pt")
+        doc.setFont("helvetica")
+        doc.setFontSize(10);
+        doc.text(50, 20, `Concession Application ID: ${required_application[0]._id}`)
+        doc.text(50, 50, `Applicant Name: ${profile.nameAsPerIdCard}`)
+        doc.text(50, 80, `Applicant Email: ${required_application[0].email}`)
+        doc.text(50, 110, `Concession Application Date: ${required_application[0].appliedOn}`)
+        doc.text(50, 140, `Concession Application Acceptance Date: ${required_application[0].applicationAcceptedOn}`)
+        doc.text(50, 170, `Travel Route: ${required_application[0].startLocation} To ${required_application[0].endLocation}`)
+        doc.text(50, 200, `Mode Of Travel: ${required_application[0].travelOption}`)
+        doc.text(50, 230, `Travel Pass Period: ${required_application[0].travelPassPeriod}`)
+        doc.text(50, 260, `College Name: ${profile.collegeName}`)
+        doc.text(50, 290, `Branch: ${profile.branchName}`)
+        doc.text(50, 320, `Current Year Of Study: ${profile.currentYearOfStudy}`)
+        doc.text(50, 380, `Student Pic:`)
+        doc.addImage(profile.profilePic, "JPEG", 150, 350, 200, 200)
+        doc.save("concession.pdf")
     }
 
 
@@ -190,9 +212,17 @@ const UserPastConcessionApplication = () => {
                                 </Form>
                                 <br></br>
                                 {
+                                    required_application[0].applicationStatus === "Approved" ?
+                                        <div style={{ display: "flex", height: "100px", justifyContent: "center" }}>
+                                            <Button onClick={() => downloadPdf()} variant='warning' style={{ height: "50px", width: "300px !important" }}>Download Concession Letter</Button>
+                                        </div>
+                                        :
+                                        null
+                                }
+                                {
                                     required_application[0].amountPaid === true && showPaymentDetails === false ?
                                         <div style={{ display: "flex", height: "100px", justifyContent: "center" }}>
-                                            <Button onClick={() => paymentIdDetails(required_application[0].paymentId)} style={{ height: "50px" }}>View Payment Details</Button>
+                                            <Button style={{ height: "50px", width: "300px !important" }} onClick={() => paymentIdDetails(required_application[0].paymentId)}>View Payment Details</Button>
                                         </div>
                                         :
                                         null

@@ -29,6 +29,7 @@ const PassApplication = () => {
         navigate("/user/travel-pass/applications/past-applications")
     }
     const currentApplication = useSelector((state) => state.userReducer.profileInfo)
+    console.log(currentApplication);
 
     const initPayment = (data) => {
         const token = localStorage.getItem("token")
@@ -114,7 +115,7 @@ const PassApplication = () => {
                                                             {
                                                                 currentApplication.applications.allApplications.length > 0 ?
                                                                     <>
-                                                                        {currentApplication.applications.currentApplication.amountPaid === false ? <Button onClick={() => handlePayment()} className='admin-btn' style={{ backgroundColor: "Purple", border: "none" }}>3. Pay <span style={{ fontWeight: "700", color: "Yellow", margin: "0 10px" }}> &#8377; {currentApplication.applications.currentApplication.amount}</span>  For Your Last Pass Application</Button> :
+                                                                        {currentApplication.applications.currentApplication.amountPaid === false && currentApplication.applications.currentApplication.applicationStatus === "Approved" ? <Button onClick={() => handlePayment()} className='admin-btn' style={{ backgroundColor: "Purple", border: "none" }}>3. Pay <span style={{ fontWeight: "700", color: "Yellow", margin: "0 10px" }}> &#8377; {currentApplication.applications.currentApplication.amount}</span>  For Your Last Pass Application</Button> :
                                                                             null}
                                                                     </>
                                                                     :

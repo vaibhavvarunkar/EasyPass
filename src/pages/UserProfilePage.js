@@ -9,8 +9,11 @@ import Select from 'react-select';
 import axios from 'axios';
 import moment from 'moment';
 import { API_ROOT } from '../constants';
-import { userProfileInfo, clearUserProfileInfo } from '../redux/actions/UserActions';
+import { userProfileInfo, clearUserProfileInfo, clearUserInfo } from '../redux/actions/UserActions';
 import Loader from '../components/loader/Loader';
+import { useNavigate } from 'react-router-dom';
+import { clearApprovedConcessionReq, clearConcessionReq, clearVerificationReq, clearVerifiedProfiles } from '../redux/actions/AdminActions';
+import { jsPDF } from "jspdf";
 
 const UserProfilePage = () => {
     const [loading, setLoading] = useState(false);
@@ -18,6 +21,7 @@ const UserProfilePage = () => {
     const [college, setCollege] = useState({});
     const [collegeIdFile, setCollegeIdFile] = useState(null);
     const [preview, setPreview] = useState(null);
+    const [preview2, setPreview2] = useState(null);
     const [year, setYear] = useState({});
     const [branch, setBranch] = useState({});
     const [savedProfileView, setSavedProfileView] = useState(false);
@@ -26,6 +30,7 @@ const UserProfilePage = () => {
     const userEmail = useSelector((state) => state.userReducer.userInfo.email);
     const userName = useSelector((state) => state.userReducer.userInfo.name);
     const profileInfo = useSelector((state) => state.userReducer.profileInfo);
+    const [profilePicFile, setProfilePicFile] = useState(null)
     const authenticate = () => {
         localStorage.getItem('token') ? setAuth(true) : setAuth(false);
     };
@@ -79,8 +84,13 @@ const UserProfilePage = () => {
         setCollegeIdFile(e.target.files[0]);
     };
 
+    const profileUpload = (e) => {
+        setPreview2(URL.createObjectURL(e.target.files[0]));
+        setProfilePicFile(e.target.files[0]);
+    };
+
     const submitProfile = async (e) => {
-        if (collegeIdFile === null || startDate === null || branch === null || year === null || userIdName === null) {
+        if (collegeIdFile === null || startDate === null || branch === null || year === null || userIdName === null || profilePicFile === null) {
             alert("All fields are necessary !")
         }
         else {
@@ -101,9 +111,20 @@ const UserProfilePage = () => {
                 const res = await axios.post(`${API_ROOT}/profile/create`, form, config);
                 console.log(res);
                 if (res.data.status === 200) {
-                    dispatch(userProfileInfo(res.data.profilee))
-                    setSavedProfileView(true);
-                    setLoading(false);
+                    let form1 = new FormData();
+                    form1.append("profilePic", profilePicFile)
+                    try {
+                        const res2 = await axios.post(`${API_ROOT}/profile/profilepic`, form1, config);
+                        if (res2.data.status === 200) {
+                            console.log(res2);
+                            dispatch(userProfileInfo(res2.data.profilee))
+                            setSavedProfileView(true);
+                            setLoading(false);
+                        }
+                    }
+                    catch (err) {
+                        alert(err)
+                    }
                 } else {
                     alert(res.data.message);
                     setLoading(false);
@@ -161,6 +182,58 @@ const UserProfilePage = () => {
         }
     }
 
+    const navigate = useNavigate()
+
+    const deleteAccount = async (e) => {
+        e.preventDefault()
+        setLoading(true)
+        const token = await localStorage.getItem("token")
+        const config = {
+            headers: { Authorization: `Bearer ${token}` }
+        }
+        const body = {
+
+        }
+        try {
+            const res = await axios.post(
+                `${API_ROOT}/profile/deleteaccount`, body, config)
+            console.log(res);
+            if (res.data.status === 200) {
+                alert("Profile Deleted Successfully !")
+                e.preventDefault()
+                dispatch(clearUserInfo())
+                dispatch(clearUserProfileInfo())
+                dispatch(clearVerificationReq())
+                dispatch(clearVerifiedProfiles())
+                dispatch(clearConcessionReq())
+                dispatch(clearApprovedConcessionReq())
+                localStorage.removeItem("token")
+                navigate("/login")
+            }
+        }
+        catch (err) {
+            alert(err);
+        }
+        setLoading(false)
+    }
+
+    const downloadPdf = () => {
+        var doc = new jsPDF("p", "pt")
+        doc.setFont("helvetica")
+        doc.setFontSize(10);
+        doc.text(50, 20, `Applicant Name: ${profileInfo.nameAsPerIdCard}`)
+        doc.text(50, 50, `Pass Status: ${profileInfo.passinfo.passStatus}`)
+        doc.text(50, 80, `Pass Validity: ${profileInfo.passinfo.passValidity}`)
+        doc.text(50, 110, `Pass Type: ${profileInfo.passinfo.passType}`)
+        doc.text(50, 140, `Pass Route: ${profileInfo.passinfo.passRoute}`)
+        doc.text(50, 170, `Pass Approve date: ${profileInfo.passinfo.passGivenDate}`)
+        doc.text(50, 200, `Pass Start date: ${profileInfo.passinfo.passStartDate}`)
+        doc.text(50, 230, `Pass End date: ${profileInfo.passinfo.passEndDate}`)
+        doc.text(50, 260, `Student Pic:`)
+        doc.addImage(profileInfo.passinfo.profilePic, "JPEG", 150, 300, 200, 200)
+        doc.save("TravelPass.pdf")
+    }
+
 
     return (
         <div>
@@ -175,6 +248,29 @@ const UserProfilePage = () => {
                                     <UserNavbar />
                                     <div className='user-profile'>
                                         <Form>
+                                            <Form.Group
+                                                className='mb-3'
+                                                controlId='exampleForm.ControlInput1'
+                                            >
+                                                <Form.Label>Profile Picture</Form.Label>
+                                                <Form.Control
+                                                    onChange={(e) => profileUpload(e)}
+                                                    accept='.png, .jpg, .jpeg, .pdf'
+                                                    type='file'
+                                                    placeholder='College ID Proof'
+                                                    required
+                                                />
+                                            </Form.Group>
+                                            {profilePicFile !== null ? (
+                                                <img
+                                                    id='collegeId'
+                                                    style={{ height: '120px', width: '200px' }}
+                                                    src={preview2}
+                                                    alt='Id-preview'
+                                                ></img>
+                                            ) : (
+                                                <></>
+                                            )}
                                             <Form.Group
                                                 className='mb-3'
                                                 controlId='exampleForm.ControlInput1'
@@ -310,6 +406,21 @@ const UserProfilePage = () => {
                         <UserNavbar />
                         <br></br>
                         <Form style={{ width: '90%', margin: 'auto' }}>
+                            {profilePicFile !== null || profileInfo.profilePic !== undefined ? (
+                                <>
+                                    <Form.Group className='mb-3' controlId='formBasicPassword'>
+                                        <Form.Label>Profile Pic</Form.Label>
+                                    </Form.Group>
+                                    <img
+                                        id='collegeId'
+                                        style={{ height: '120px', width: '200px' }}
+                                        src={profileInfo.profilePic}
+                                        alt='Id-preview'
+                                    ></img>
+                                </>
+                            ) : (
+                                <></>
+                            )}
                             <Form.Group className='mb-3' controlId='formBasicEmail'>
                                 <Form.Label>Account Verification Status</Form.Label>
                                 <Form.Control
@@ -394,6 +505,25 @@ const UserProfilePage = () => {
                                     style={{ height: '300px', width: '300px', margin: 'auto' }}
                                 ></img>
                             </div>
+                            <br></br>
+                            <br></br>
+
+                            {
+                                profileInfo.passinfo !== undefined || profileInfo.passinfo.length > 0 ?
+                                    <div style={{ display: "flex", justifyContent: "center" }}>
+                                        <Button variant='success' onClick={() => downloadPdf()}>Download Pass</Button>
+                                    </div> : null
+                            }
+                            <br></br>
+                            <br></br>
+                            {
+                                profileInfo.profileVerifystatus === "Verified" || profileInfo.profileVerifystatus === "Rejected" ? <div style={{ display: "flex", justifyContent: "center" }}>
+                                    <Button variant='danger' onClick={(e) => deleteAccount(e)}>Delete My Account</Button>
+                                </div> : null
+                            }
+                            <br></br>
+
+
                             <br></br>
                             {
                                 profileInfo.profileVerifyApplied ? null : <>

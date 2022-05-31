@@ -10,13 +10,11 @@ import SuccessRegister from './SuccessRegister';
 import Loader from '../components/loader/Loader';
 import { useDispatch, useSelector } from 'react-redux';
 import { saveUserInfo, userProfileInfo } from '../redux/actions/UserActions';
-import { getApprovedConcessionReq, getConcessionReq, getVerificationReq, getVerifiedProfiles } from '../redux/actions/AdminActions';
-import createUtilityClassName from 'react-bootstrap/esm/createUtilityClasses';
+import { getApprovedBusPassReqs, getApprovedConcessionReq, getApprovedTrainPassReqs, getBusPassReqs, getConcessionReq, getTrainPassReqs, getVerificationReq, getVerifiedProfiles } from '../redux/actions/AdminActions';
 
 const Login = () => {
     const navigate = useNavigate()
     const userType = useSelector((state) => state.userReducer.userInfo.type);
-    console.log(userType);
 
 
 
@@ -140,6 +138,49 @@ const Login = () => {
             alert(err)
         }
     }
+
+    const getBusPassApi = async () => {
+        const token = await localStorage.getItem("token")
+        const config = {
+            headers: { Authorization: `Bearer ${token}` }
+        }
+        try {
+            const res = await axios.get(
+                `${API_ROOT}/profile/busPasses`,
+                config
+            )
+            console.log(res);
+            if (res.data.status === 200) {
+                dispatch(getBusPassReqs(res.data.unapprovedBusApps))
+                dispatch(getApprovedBusPassReqs(res.data.approvedBusApps))
+            }
+        }
+        catch (err) {
+            alert(err)
+        }
+    }
+
+
+    const getTrainPassApi = async () => {
+        const token = await localStorage.getItem("token")
+        const config = {
+            headers: { Authorization: `Bearer ${token}` }
+        }
+        try {
+            const res = await axios.get(
+                `${API_ROOT}/profile/railwayPasses`,
+                config
+            )
+            console.log(res);
+            if (res.data.status === 200) {
+                dispatch(getTrainPassReqs(res.data.unapprovedRailApps))
+                dispatch(getApprovedTrainPassReqs(res.data.approvedRailApps))
+            }
+        }
+        catch (err) {
+            alert(err)
+        }
+    }
     const handleLogin = async (e) => {
         e.preventDefault()
         if (user.value === "student" || user.value === "college admin" || user.value === "train admin" || user.value === "bus admin") {
@@ -172,12 +213,14 @@ const Login = () => {
                     else if (res.data.result.type === "train admin") {
                         localStorage.setItem("token", res.data.token)
                         dispatch(saveUserInfo(res.data.result))
+                        getTrainPassApi()
                         naviagte("/admin/train/home")
                         setLoading(false)
                     }
                     else if (res.data.result.type === "bus admin") {
                         localStorage.setItem("token", res.data.token)
                         dispatch(saveUserInfo(res.data.result))
+                        getBusPassApi()
                         naviagte("/admin/bus/home")
                         setLoading(false)
                     }

@@ -1,4 +1,6 @@
 import { CLEAR_VERIFICATION_REQ, CLEAR_VERIFIED_PROFILES, GET_VERIFICATION_REQ, GET_VERIFIED_PROFILES, GET_CONCESSION_REQ, GET_APPROVED_CONCESSION_REQ, CLEAR_CONCESSION_REQ, CLEAR_APPROVED_CONCESSION_REQ } from "../actionTypes/AdminActionTypes";
+import { CLEAR_BUS_APPROVED_PASS_REQS, CLEAR_BUS_PASS_REQS, GET_BUS_APPROVED_PASS_REQ, GET_BUS_PASS_REQS } from "../actionTypes/BusAdminActionTypes";
+import { CLEAR_TRAIN_APPROVED_PASS_REQS, CLEAR_TRAIN_PASS_REQS, GET_TRAIN_APPROVED_PASS_REQ, GET_TRAIN_PASS_REQS } from "../actionTypes/TrainAdminActionTypes";
 import { SAVE_USER_INFO, CLEAR_USER_INFO, USER_PROFILE_INFO, CLAER_USER_PROFILE_INFO } from "../actionTypes/UserActionsTypes";
 
 const initialState = {
@@ -7,7 +9,11 @@ const initialState = {
     getVerificationReqs: [],
     getVerifiedProfiles: [],
     getConcessionReqs: [],
-    getApprovedConcessionReqs: []
+    getApprovedConcessionReqs: [],
+    getBusPassReqs: [],
+    getApprovedBusPassReqs: [],
+    getTrainPassReqs: [],
+    getApprovedPassReqsTrain: []
 }
 
 const userInfoReducer = (state = initialState, action) => {
@@ -71,6 +77,46 @@ const userInfoReducer = (state = initialState, action) => {
             return {
                 ...state,
                 getApprovedConcessionReqs: []
+            }
+        case GET_BUS_PASS_REQS:
+            return {
+                ...state,
+                getBusPassReqs: action.payload
+            }
+        case GET_BUS_APPROVED_PASS_REQ:
+            return {
+                ...state,
+                getApprovedPassReqs: action.payload
+            }
+        case CLEAR_BUS_PASS_REQS:
+            return {
+                ...state,
+                getBusPassReqs: []
+            }
+        case CLEAR_BUS_APPROVED_PASS_REQS:
+            return {
+                ...state,
+                getApprovedPassReqs: []
+            }
+        case GET_TRAIN_PASS_REQS:
+            return {
+                ...state,
+                getTrainPassReqs: action.payload
+            }
+        case GET_TRAIN_APPROVED_PASS_REQ:
+            return {
+                ...state,
+                getApprovedPassReqsTrain: action.payload
+            }
+        case CLEAR_TRAIN_PASS_REQS:
+            return {
+                ...state,
+                getTrainPassReqs: []
+            }
+        case CLEAR_TRAIN_APPROVED_PASS_REQS:
+            return {
+                ...state,
+                getApprovedPassReqsTrain: []
             }
         default: return state
 

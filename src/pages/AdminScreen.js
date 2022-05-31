@@ -33,7 +33,7 @@ const AdminScreen = () => {
     }
 
     const navigate4 = () => {
-        navigate("/admin/approved-concession-application")
+        navigate("/admin/approved-rejected-concession-application")
     }
     const navigate5 = () => {
         navigate("/admin/approved-concession-application")
@@ -51,9 +51,9 @@ const AdminScreen = () => {
                         <Button style={{ backgroundColor: "Red", border: "none" }} onClick={() => navigate1()} className='admin-btn'>1. Click Here To View Student Verification Requests</Button>
                         <Button style={{ backgroundColor: "hotPink", border: "none" }} onClick={() => navigate2()} className='admin-btn'>2. Click Here To View Student Consession Letter Applications</Button>
                         <Button style={{ backgroundColor: "Orange", border: "none" }} onClick={() => navigate3()} className='admin-btn'>3. Click Here To View Verified Students</Button>
-                        <Button style={{ backgroundColor: "seaGreen", border: "none" }} onClick={() => navigate4()} className='admin-btn'>4. Click Here To View Student Approved Consession Letter Applicaions</Button>
-                        <Button style={{ backgroundColor: "purple", border: "none" }} onClick={() => navigate5()} className='admin-btn'>5. Click Here To View Student Requests For Travel Pass</Button>
-                        <Button style={{ backgroundColor: "Brown", border: "none" }} onClick={() => navigate6()} className='admin-btn'>6. Click Here To View Student List Of Approved Pass</Button>
+                        <Button style={{ backgroundColor: "seaGreen", border: "none" }} onClick={() => navigate4()} className='admin-btn'>4. Click Here To View Student Approved/Rejected Consession Letter Applications</Button>
+                        {/* <Button style={{ backgroundColor: "purple", border: "none" }} onClick={() => navigate5()} className='admin-btn'>5. Click Here To View Student Requests For Travel Pass</Button>
+                        <Button style={{ backgroundColor: "Brown", border: "none" }} onClick={() => navigate6()} className='admin-btn'>6. Click Here To View Student List Of Approved Pass</Button> */}
                     </div>
                 </>
                     :

@@ -65,7 +65,7 @@ const PassHistoryApplications = () => {
                                                 }
                                             </>
                                                 :
-                                                <h1>No Verification Requests</h1>
+                                                <h1>No History Available</h1>
                                         }
                                     </tbody>
                                 </Table>
